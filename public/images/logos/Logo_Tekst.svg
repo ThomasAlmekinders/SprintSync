@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="9 12 173.75 59">
+    <style>
+        .text { font: bold 30px sans-serif; fill: #ed6809; }
+        .line { stroke: #ed6809; stroke-width: 2; }
+    </style>
+    <text x="10" y="40" class="text">Sprint</text>
+    <line x1="100" y1="30" x2="100" y2="70" class="line"/>
+    <text x="110" y="40" class="text">Sync</text>
+</svg>

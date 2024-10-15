@@ -1,0 +1,329 @@
+:root {
+    --primary-color: #ed6809; /* Jouw primaire kleur */
+    --secondary-color: #6c757d; /* Jouw secundaire kleur */
+    --background-color: #e9ecef; /* Achtergrondkleur */
+    --text-color: #000000; /* Tekstkleur */
+    --warning-color: #ffc107; /* Waarschuwingskleur */
+
+    --bs-modal-bg: #ffffff; /* Achtergrondkleur van modals */
+    --bs-modal-color: #000000; /* Zwart als standaard tekstkleur voor modals */
+    --bs-modal-title-color: #ed6809; /* Titelkleur van de modal */
+    --bs-modal-text-color: #212529; /* Tekstkleur in de modal */
+    --bs-modal-footer-bg: #f8f9fa; /* Achtergrondkleur van de footer in de modal */
+    --bs-modal-footer-btn-bg: #ed6809; /* Achtergrondkleur van de knoppen in de footer */
+    --bs-modal-footer-btn-text-color: #ffffff; /* Tekstkleur van de knoppen in de footer */
+}
+
+/* Voor WebKit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+    width: 10px; /* Dunner voor een modernere look */
+}
+
+::-webkit-scrollbar-track {
+    background: #d3d3d3; /* Iets donkerder voor contrast */
+    border-radius: 5px; /* Meer subtiele hoeken */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ed6809; /* Hoofd kleur */
+    border-radius: 5px; /* Subtiele hoeken */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #d05e08; /* Iets donkerder bij hover */
+}
+
+/* Voor Firefox */
+.scroll-container {
+    scrollbar-width: thin; /* Dunner voor een modernere look */
+    scrollbar-color: #ed6809 #d3d3d3; /* Hoofd kleur en track kleur */
+}
+
+
+html {
+    padding: 1rem;
+    scroll-behavior: smooth;
+    overflow: -moz-scrollbars-vertical; 
+    overflow-y: scroll;
+
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 0.875rem;
+
+    background: #e9ecef;
+    background-color: #e9ecef;
+}
+
+.navbar-light .navbar-nav .nav-link.active {
+    color: #ed6809;
+    font-weight: bold;
+
+    pointer-events: none;
+     cursor: default;
+}
+.nav-item.dropdown .dropdown-item.active {
+    color: #ed6809;
+    font-weight: bold;
+    background: transparent;
+
+    pointer-events: none;
+    cursor: default;
+}
+
+.navbar {
+    background-color: #f0f0f0;
+    border-bottom: 2px solid #ed6809; 
+}
+
+@media only screen and (min-width: 768px) {
+
+    .dropdown-menu {
+        border: 1px solid #e9ecef;
+        border-radius: 0.25rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: .5rem;
+    }
+    .dropdown-menu.is-right {
+        right: 0px;
+    }
+    .dropdown-item {
+        transition: background-color 0.3s;
+    }
+    .dropdown-item:hover {
+        background-color: #e6e6e6;
+        color: #212529a8;
+    }
+}
+@media only screen and (max-width: 767px) {
+    .dropdown-menu {
+        border: none;
+        background: transparent;
+        text-align: center;
+    }
+}
+
+.lead {
+    font-size: 1.25rem;
+    color: #666;
+}
+
+ul.list-unstyled li i {
+    font-size: 1rem; /* Tekst iets groter maken voor consistentie */
+}
+ul.list-unstyled li i {
+    margin-right: 10px; /* Extra ruimte tussen icoon en tekst */
+}
+
+
+h1 {
+    color: #ed6809;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 40px;
+}
+form .form-control {
+    border-radius: 0.75rem;
+    border: 2px solid #ced4da;
+    transition: all 0.3s ease;
+}
+form .form-control:focus {
+    border-color: #ed6809;
+    box-shadow: none;
+}
+form label {
+    padding-left: 1rem;
+}
+input[type='checkbox'] {
+    cursor: pointer;
+}
+.btn-primary {
+    background-color: #ed6809;
+    border-color: #ed6809;
+    /*border-radius: 50px;
+    padding: 10px 20px;*/
+    font-weight: bold;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.btn-primary:hover {
+    background-color: #ff8533;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.alt-contact {
+    text-align: center;
+    margin-top: 40px;
+}
+.alt-contact a {
+    color: #ed6809;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.alt-contact a:hover {
+    color: #ff8533;
+}
+
+
+footer {
+    background-color: #333;
+    color: white;
+}
+
+.footer-link {
+    color: #ed6809;
+}
+.footer-link:hover {
+    color: #ff8c42;
+}
+.footer-link.active {
+    color: #ed680969;
+    pointer-events: none;
+    cursor: default;
+}
+
+.footer-icon {
+    color: #ed6809;
+    text-decoration: none;
+    font-size: 2rem;
+    margin-right: 20px;
+}
+
+.footer-icon:hover {
+    color: #ff8c42;
+}
+
+
+
+.bg-gradient {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), transparent);
+}
+.img-doc {
+    height: 400px;
+    object-fit: cover;
+    object-position: top;
+}
+
+.hover\:border:hover {
+    border: 2px solid #007bff;
+}
+
+.object-fit-cover {
+    object-fit: cover;
+}
+
+.transition {
+    transition: all 0.3s ease;
+}
+
+.docs-card,
+.docs-card ~ div a:not(.text-decoration-underline) {
+    position: relative;
+    border-radius: 0.65rem!important;
+}
+
+.docs-card::before,
+.docs-card ~ div a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 3px solid transparent;
+    border-radius: 0.5rem;
+    transition: border-color 0.3s ease;
+}
+
+.docs-card:hover::before,
+.docs-card ~ div a:hover::before {
+    border-color: #ed68094d  !important;
+    pointer-events: none;
+}
+
+.border-hover:hover {
+    border-color: #ed68094d  !important;
+}
+
+.bg-dashboard-circles {
+    background: #e9ecef;
+    background-color: #e9ecef;
+    padding: 1rem!important;     
+}
+
+.profile-img {
+    border-radius: 50%;
+}
+
+.toast {
+    background-color: #28a745; /* Groene achtergrond voor succes */
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    opacity: 0.9;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Aangepaste modal stijlen */
+.modal-content {
+    max-height: calc(100vh - 1rem); /* Max hoogte van de modal */
+    display: flex;
+    flex-direction: column; /* Zorg ervoor dat de header, body en footer goed zijn uitgelijnd */
+
+    background-color: #f8f9fa; /* Lichte achtergrondkleur */
+    border-radius: 0.5rem; /* Hoekradius */
+}
+
+.modal-header {
+    border-bottom: 2px solid #ed6809; /* Zwaardere onderrand */
+}
+
+.modal-body {
+    flex: 1; /* Laat de modal-body de beschikbare ruimte innemen */
+    overflow-y: auto; /* Voeg scroll toe aan de modal-body */
+    padding: 0; /* Verwijder padding van de modal-body, voeg deze toe in modal-text */
+}
+
+.btn-close {
+    color: #ed6809; /* Kleur van de 'X' knop */
+    font-size: 1.5rem; /* Grotere knop */
+    opacity: 1; /* Zorg ervoor dat de knop volledig zichtbaar is */
+}
+
+.btn-close:hover {
+    color: #dc3545; /* Kleur bij hover */
+    cursor: pointer; /* Handcursor bij hover */
+}
+
+
+.modal-title {
+    font-weight: bold; /* Vetgedrukt voor een betere leesbaarheid */
+}
+
+.modal-body p {
+    line-height: 1.5; /* Verbeterde regelafstand voor leesbaarheid */
+}
+
+@media (min-width: 992px) {
+    .modal p {
+        line-height: 2rem;
+    }
+}
+
+.web-settings {
+    position: fixed;
+    bottom: 0px;
+    left: 25px;
+
+    background: #000000;
+    background-color: #00000063;
+    padding: .4rem 1rem;
+    border-radius: 5px 5px 0px 0px;
+}
+.web-settings i::before {
+    font-size: 1.25rem;
+    font-weight: 600 !important;
+    vertical-align: -.325rem;
+}
