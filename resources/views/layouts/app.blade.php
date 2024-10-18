@@ -13,6 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 
@@ -65,9 +66,121 @@
     <footer class="mt-auto">
         @include('layouts.footer')
     </footer>
-
+    
+    @vite('resources/js/app.js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
 </body>
 
 </html>
+<script defer>
+    function setCookie(name, value, days) {
+        const expires = new Date(Date.now() + days * 864e5).toUTCString();
+        document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+    }
+
+    function getCookie(name) {
+        return document.cookie.split('; ').reduce((r, v) => {
+            const parts = v.split('=');
+            return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+        }, '');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const welcomeModal = document.getElementById('welcomeModal');
+        const closeModalButtons = document.querySelectorAll('.btn-close, .btn-secondary');
+        const overlay = document.createElement('div');
+
+        if (!getCookie('modalClosed')) {
+            welcomeModal.classList.add('zoom-in', 'show'); // Voeg zoom-in toe
+            welcomeModal.style.display = 'block';
+            overlay.classList.add('show');
+            document.body.classList.add('modal-open');
+            overlay.classList.add('modal-backdrop', 'fade');
+            document.body.appendChild(overlay);
+        }
+
+        closeModalButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                closeModal(); // Gebruik de closeModal functie
+            });
+        });
+
+        welcomeModal.addEventListener('click', function () {
+            welcomeModal.classList.remove('zoom-in');
+            welcomeModal.classList.add('bounce');
+            setTimeout(() => {
+                welcomeModal.classList.remove('bounce');
+            }, 500);
+        });
+
+        function closeModal() {
+            setTimeout(() => {
+                welcomeModal.classList.remove('bounce');
+            }, 10);
+            welcomeModal.classList.remove('zoom-in');
+            welcomeModal.classList.add('zoom-out');
+
+            welcomeModal.addEventListener('animationend', function handler() {
+                welcomeModal.classList.remove('zoom-out', 'show');
+                welcomeModal.style.display = 'none';
+                overlay.classList.remove('show');
+                document.body.classList.remove('modal-open');
+                overlay.remove();
+                setCookie('modalClosed', 'true', 30);
+                welcomeModal.removeEventListener('animationend', handler);
+            });
+        }
+    });
+</script>
+
+<style>
+    /* Zoom In */
+    .modal.zoom-in {
+        animation: zoomIn 0.5s forwards;
+    }
+
+    /* Zoom Out */
+    .modal.zoom-out {
+        animation: zoomOut 0.5s forwards;
+    }
+
+    @keyframes zoomIn {
+        0% {
+            transform: scale(0);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes zoomOut {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(0);
+            opacity: 0;
+        }
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: scale(1);
+        }
+        40% {
+            transform: scale(1.1);
+        }
+        60% {
+            transform: scale(1.05);
+        }
+    }
+
+    .modal.bounce {
+        animation: bounce 0.5s;
+    }
+
+</style>

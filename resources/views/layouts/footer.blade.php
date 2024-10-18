@@ -65,7 +65,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="welcomeModalLabel">Welkom bij SprintSync!</h5>
+                <h5 class="modal-title" id="welcomeModalLabel">Welkom bij SprintNest!</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-0">
@@ -74,13 +74,13 @@
                 </div>
                 <div class="modal-tekst" style="padding: 1rem 2rem;">
                     <p>
-                        SprintSync is een platform waar je eenvoudig scrumborden kunt aanmaken en beheren. Dit helpt teams om hun werk efficiënt te organiseren, de voortgang bij te houden en de samenwerking te verbeteren. Met tools zoals taakbeheer, deadlines en teamcommunicatie willen we je helpen om projecten soepel te laten verlopen.
+                        SprintNest is een platform waar je eenvoudig scrumborden kunt aanmaken en beheren. Dit helpt teams om hun werk efficiënt te organiseren, de voortgang bij te houden en de samenwerking te verbeteren. Met tools zoals taakbeheer, deadlines en teamcommunicatie willen we je helpen om projecten soepel te laten verlopen.
                     </p>
                     <p>
                         Houd er rekening mee dat dit project een studentinitiatie is en dat het nog in ontwikkeling is. We doen ons best om een gebruiksvriendelijke ervaring te bieden, maar er kunnen nog bugs of andere problemen optreden. Er is ook een kans op gegevensverlies, dus we raden je aan om belangrijke informatie elders op te slaan.
                     </p>
                     <p>
-                        Jouw feedback is van groot belang voor ons! We waarderen je geduld en we moedigen je aan om ons te laten weten wat je denkt. Samen kunnen we deze applicatie verbeteren en nog gebruiksvriendelijker maken. Dank je wel voor je bezoek aan SprintSync, en we hopen dat je een goede ervaring zult hebben terwijl we verder bouwen aan dit platform!
+                        Jouw feedback is van groot belang voor ons! We waarderen je geduld en we moedigen je aan om ons te laten weten wat je denkt. Samen kunnen we deze applicatie verbeteren en nog gebruiksvriendelijker maken. Dank je wel voor je bezoek aan SprintNest, en we hopen dat je een goede ervaring zult hebben terwijl we verder bouwen aan dit platform!
                     </p>
                 </div>
             </div>
