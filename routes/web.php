@@ -45,9 +45,11 @@ Route::get('/sitemap', function () {
 Auth::routes();
 
 Route::group(['middleware' => ['auth']], function() {
+
     Route::get('/dashboard', function () {
         return view('dashboard.index');
     })->name('dashboard.index');
+
 
     Route::get('/mijn-account', function () {
         return view('account.mijn-account.index');
@@ -55,10 +57,16 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/mijn-account/profiel', [Controller::class, 'profiel'])->name('mijn-account.profiel');
         Route::post('/mijn-account/profiel/update-user', [AccountController::class, 'updateProfileUser'])->name('mijn-account.update-profile-user');
         Route::post('/mijn-account/profiel/update-picture', [AccountController::class, 'updateProfilePicture'])->name('mijn-account.update-profile-picture');
+
     Route::get('/mijn-account/persoonlijke-gegevens', [Controller::class, 'persoonlijkeGegevens'])->name('mijn-account.persoonlijke-gegevens');
+        Route::post('/mijn-account/persoonlijke-gegevens/update-personal-data', [AccountController::class, 'updatePersonalData'])->name('mijn-account.update-personal-data');
+
     Route::get('/mijn-account/wachtwoord', [Controller::class, 'wachtwoord'])->name('mijn-account.wachtwoord');
+        Route::post('/mijn-account/wachtwoord/update-wachtwoord', [AccountController::class, 'updatePassword'])->name('mijn-account.update-wachtwoord');
+
     Route::get('/mijn-account/voorkeuren', [Controller::class, 'voorkeuren'])->name('mijn-account.voorkeuren');
     Route::get('/mijn-account/activiteitslog', [Controller::class, 'activiteitslog'])->name('mijn-account.activiteitslog');
+
 
     Route::get('/connecties', function () {
         return view('account.connecties.index');

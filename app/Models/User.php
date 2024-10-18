@@ -13,11 +13,6 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'username',
         'first_name',
@@ -30,21 +25,11 @@ class User extends Authenticatable
         'is_administrator',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -53,9 +38,6 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * De 'boot' methode om de username automatisch in te vullen met een UUID.
-     */
     protected static function boot()
     {
         parent::boot();
@@ -63,5 +45,10 @@ class User extends Authenticatable
         static::creating(function ($user) {
             $user->username = (string) Str::uuid();
         });
+    }
+
+    public function address()
+    {
+        return $this->hasOne(Address::class);
     }
 }

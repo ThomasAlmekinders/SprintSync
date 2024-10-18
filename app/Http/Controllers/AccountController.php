@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 use App\Models\User;
+use App\Models\Address;
 
 class AccountController extends Controller
 {
@@ -25,6 +28,7 @@ class AccountController extends Controller
 
         return redirect()->back()->with('success', 'Uw profiel is succesvol bijgewerkt.');
     }
+
 
     public function updateProfilePicture(Request $request)
     {
@@ -54,4 +58,40 @@ class AccountController extends Controller
 
         return redirect()->back()->withErrors(['profile_picture' => 'Er is geen afbeelding geüpload.']);
     }
+
+
+    public function updatePersonalData(Request $request)
+    {
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . Auth::id(),
+            'phone_number' => 'nullable|string|max:15|unique:users,phone_number,' . Auth::id(),
+            'street' => 'nullable|string|max:255',
+            'house_number' => 'nullable|string|max:10',
+            'city' => 'nullable|string|max:255',
+            'postcode' => 'nullable|string|max:10',
+            'country' => 'nullable|string|max:255',
+        ]);
+
+        $user = Auth::user();
+
+        $user->update($request->only(['first_name', 'last_name', 'email', 'phone_number']));
+
+        $address = $user->address; 
+
+        if ($address) {
+            $address->update($request->only(['street', 'house_number', 'city', 'postcode', 'country']));
+        } else {
+            $address = new Address();
+            $address->fill($request->only(['street', 'house_number', 'city', 'postcode', 'country']));
+            $address->user_id = $user->id;
+            $address->save();
+        }
+
+        \Log::info('Address data:', $address->toArray());
+
+        return redirect()->route('mijn-account.persoonlijke-gegevens')->with('success', 'Persoonlijke gegevens zijn succesvol bijgewerkt!');
+    }
+
 }
