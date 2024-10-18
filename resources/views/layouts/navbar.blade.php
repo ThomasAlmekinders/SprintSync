@@ -15,11 +15,10 @@
                         Informatie
                     </span>
                     <div class="dropdown-menu is-right dropdown-menu-end" aria-labelledby="informatieDropdown">
-                        <a class="dropdown-item nav-link {{ Request::is('functioneel-ontwerp') ? 'active' : '' }}" href="/functioneel-ontwerp">Functioneel ontwerp</a>
-                        <a class="dropdown-item nav-link mb-3 {{ Request::is('technisch-ontwerp') ? 'active' : '' }}" href="/technisch-ontwerp">Technisch ontwerp</a>
-
-                        <a class="dropdown-item nav-link {{ Request::is('over-ons') ? 'active' : '' }}" href="/over-ons">Over Ons</a>
-                        <a class="dropdown-item nav-link mb-3 {{ Request::is('contact') ? 'active' : '' }}" href="/contact">Contact</a>
+                        <a class="dropdown-item nav-link {{ Route::currentRouteName() == 'functioneel-ontwerp.index' ? 'active' : '' }}" href="{{ route('functioneel-ontwerp.index') }}">Functioneel ontwerp</a>
+                        <a class="dropdown-item nav-link mb-3 {{ Route::currentRouteName() == 'technisch-ontwerp.index' ? 'active' : '' }}" href="{{ route('technisch-ontwerp.index') }}">Technisch ontwerp</a>
+                        <a class="dropdown-item nav-link {{ Route::currentRouteName() == 'over-ons.index' ? 'active' : '' }}" href="{{ route('over-ons.index') }}">Over Ons</a>
+                        <a class="dropdown-item nav-link mb-3 {{ Route::currentRouteName() == 'contact.index' ? 'active' : '' }}" href="{{ route('contact.index') }}">Contact</a>
                     </div>
                 </li>
             </ul>
@@ -34,13 +33,18 @@
                     </li>
                 @else
                     <li class="nav-item dropdown text-center">
-                        <img src="{{ asset('images/profile_pictures/' . Auth::user()->profile_picture ?? 'images/profile_pictures/default_profile.svg') }}" alt="Profielfoto" class="profile-img d-inline-block" height="75px" width="75px">
+                        <img src="{{ asset('images/profile_pictures/' . (Auth::user()->profile_picture ?? 'images/profile_pictures/default_profile.svg')) }}" alt="Profielfoto" class="profile-img d-inline-block" height="75px" width="75px">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle d-inline-block" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ Auth::user()->first_name }}
-                            {{ Auth::user()->last_name }}
+                            {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
                         </a>
 
                         <div class="dropdown-menu is-right dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item nav-link" href="{{ route('mijn-account.profiel') }}">
+                                Mijn Account
+                            </a>
+                            <a class="dropdown-item nav-link" href="{{ route('connecties.index') }}">
+                                Connecties
+                            </a>
                             <a class="dropdown-item nav-link" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
                                              document.getElementById('logout-form').submit();">

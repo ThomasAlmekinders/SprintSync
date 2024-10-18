@@ -3,7 +3,6 @@
         <div class="row">
             <div class="col-md-4 text-center">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <!-- <img src="{{ asset('images/logos/Logo_Tekst.svg') }}" alt="{{ config('app.name', 'Laravel') }}" style="width: 200px; height: auto;" height="67px" width="200px"> -->
                     <img src="{{ asset('images/logos/Logo_round_Comp.webp') }}" alt="{{ config('app.name', 'Laravel') }}" style="width: 150px; height: 115px;" height="115px" width="150px">
                 </a>
                 <p class="text-start">Een moderne tool voor het beheren van al jouw Scrum boards.</p>
@@ -11,12 +10,14 @@
             <div class="col-md-4">
                 <h5>Links</h5>
                 <ul class="list-unstyled">
-                    <li><a href="/" class="footer-link {{ Request::is('/') ? 'active' : '' }}">Home</a></li>
+                    <li><a href="{{ route('home.index') }}" class="footer-link {{ Route::currentRouteName() == 'home.index' ? 'active' : '' }}">Home</a></li>
                     @auth
-                    <li><a href="/dashboard" class="footer-link {{ Request::is('dashboard') ? 'active' : '' }}">Dashboard</a></li>
+                    <li><a href="{{ route('dashboard.index') }}" class="footer-link {{ Route::currentRouteName() == 'dashboard.index' ? 'active' : '' }}">Dashboard</a></li>
+                    <li><a href="{{ route('mijn-account.profiel') }}" class="footer-link {{ Route::currentRouteName() == 'mijn-account.profiel' ? 'active' : '' }}">Mijn Account</a></li>
+                    <li><a href="{{ route('connecties.index') }}" class="footer-link {{ Route::currentRouteName() == 'connecties.index' ? 'active' : '' }}">Connecties</a></li>
                     @endauth
-                    <li><a href="/over-ons" class="footer-link {{ Request::is('over-ons') ? 'active' : '' }}">Over ons</a></li>
-                    <li><a href="/contact" class="footer-link {{ Request::is('contact') ? 'active' : '' }}">Contact</a></li>
+                    <li><a href="{{ route('over-ons.index') }}" class="footer-link {{ Route::currentRouteName() == 'over-ons.index' ? 'active' : '' }}">Over ons</a></li>
+                    <li><a href="{{ route('contact.index') }}" class="footer-link {{ Route::currentRouteName() == 'contact.index' ? 'active' : '' }}">Contact</a></li>
                 </ul>
             </div>
             <div class="col-md-4">
@@ -25,20 +26,17 @@
                     <a class="footer-link" href="mailto:111229@student.dcterra.nl">111229@student.dcterra.nl</a>
                 </p>
                 <p>Telefoon: 
-                    <a class="footer-link" href="tel:310612345678">+31 (0)6-12345678</a>
+                    <a class="footer-link" href="tel:+31612345678">+31 (0)6-12345678</a>
                 </p>
                 <div class="social-icons">
                     <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="footer-icon">
                         <i class="bi bi-facebook"></i>
-                        <span> </span>
                     </a>
                     <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="footer-icon">
                         <i class="bi bi-twitter-x"></i>
-                        <span> </span>
                     </a>
                     <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="footer-icon">
                         <i class="bi bi-linkedin"></i>
-                        <span> </span>
                     </a>
                 </div>
             </div>
@@ -46,22 +44,17 @@
         <div class="text-center mt-3">
             <p>&copy; 2024 {{ config('app.name', 'Laravel') }}. Alle rechten voorbehouden.</p>
             <div class="">
-                <a class="footer-link {{ Request::is('over-ons/algemene-voorwaarden') ? 'active' : '' }}"
-                   href="/over-ons/algemene-voorwaarden">Algemene voorwaarden</a>
+                <a class="footer-link {{ Route::currentRouteName() == 'algemene-voorwaarden.index' ? 'active' : '' }}" href="{{ route('algemene-voorwaarden.index') }}">Algemene voorwaarden</a>
                 <span> | </span>
-                <a class="footer-link {{ Request::is('over-ons/privacy-statement') ? 'active' : '' }}"
-                   href="/over-ons/privacy-statement">Privacy statement</a>
+                <a class="footer-link {{ Route::currentRouteName() == 'privacystatement.index' ? 'active' : '' }}" href="{{ route('privacystatement.index') }}">Privacy statement</a>
                 <span> | </span>
-                <a class="footer-link {{ Request::is('over-ons/cookie-statement') ? 'active' : '' }}"
-                   href="/over-ons/cookie-statement">Cookie statement</a>
+                <a class="footer-link {{ Route::currentRouteName() == 'cookiestatement.index' ? 'active' : '' }}" href="{{ route('cookiestatement.index') }}">Cookie statement</a>
                 <span> | </span>
-                <a class="footer-link {{ Request::is('sitemap') ? 'active' : '' }}"
-                   href="/sitemap">Sitemap</a>
+                <a class="footer-link {{ Route::currentRouteName() == 'sitemap.index' ? 'active' : '' }}" href="{{ route('sitemap.index') }}">Sitemap</a>
             </div>
         </div>
     </div>
 </footer>
-
 
 <div class="web-settings">
     <i class="bi bi-gear"></i>
