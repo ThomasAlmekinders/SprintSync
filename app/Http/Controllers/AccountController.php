@@ -94,4 +94,34 @@ class AccountController extends Controller
         return redirect()->route('mijn-account.persoonlijke-gegevens')->with('success', 'Persoonlijke gegevens zijn succesvol bijgewerkt!');
     }
 
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+                'regex:/[A-Z]/',
+                'regex:/[0-9]/',
+                'regex:/[\W_]/',
+            ],
+        ], [
+            'new_password.min' => 'Het nieuwe wachtwoord moet minimaal 8 tekens bevatten.',
+            'new_password.regex' => 'Het nieuwe wachtwoord moet een hoofdletter, een cijfer en een speciaal teken bevatten.',
+            'new_password.confirmed' => 'De bevestiging van het nieuwe wachtwoord komt niet overeen.',
+        ]);
+
+        if (!Hash::check($request->current_password, Auth::user()->password)) {
+            return back()->withErrors(['current_password' => 'Het huidige wachtwoord is onjuist.']);
+        }
+
+        Auth::user()->update([
+            'password' => Hash::make($request->new_password),
+        ]);
+
+        return back()->with('success', 'Wachtwoord is succesvol gewijzigd!');
+    }
 }
