@@ -25,6 +25,31 @@
         @include('layouts.navbar')
     </header>
 
+    <noscript>
+        <style>
+            .noscript-warning {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 50vh;
+                min-height: 500px;
+                text-align: center;
+                background-color: #f8d7da;
+                color: #721c24;
+                padding: 20px;
+                font-size: 1.2em;
+                border: 1px solid #f5c6cb;
+            }
+        </style>
+        <div class="noscript-warning">
+            <div>
+                <strong>JavaScript is vereist!</strong>
+                <p>Deze website werkt niet zonder JavaScript ingeschakeld in uw browser.</p>
+                <p>Neem alstublieft de tijd om JavaScript in te schakelen om toegang te krijgen tot alle functies van deze site.</p>
+            </div>
+        </div>
+    </noscript>
+
     <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
         <strong>Let op!</strong> Deze website is momenteel in ontwikkeling. Sommige functies zijn mogelijk nog niet beschikbaar.
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

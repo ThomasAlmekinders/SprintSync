@@ -17,8 +17,14 @@
                     <div class="dropdown-menu is-right dropdown-menu-end" aria-labelledby="informatieDropdown">
                         <a class="dropdown-item nav-link {{ Route::currentRouteName() == 'functioneel-ontwerp.index' ? 'active' : '' }}" href="{{ route('functioneel-ontwerp.index') }}">Functioneel ontwerp</a>
                         <a class="dropdown-item nav-link mb-3 {{ Route::currentRouteName() == 'technisch-ontwerp.index' ? 'active' : '' }}" href="{{ route('technisch-ontwerp.index') }}">Technisch ontwerp</a>
+
                         <a class="dropdown-item nav-link {{ Route::currentRouteName() == 'over-ons.index' ? 'active' : '' }}" href="{{ route('over-ons.index') }}">Over Ons</a>
                         <a class="dropdown-item nav-link mb-3 {{ Route::currentRouteName() == 'contact.index' ? 'active' : '' }}" href="{{ route('contact.index') }}">Contact</a>
+
+                        <a class="dropdown-item nav-link {{ Route::currentRouteName() == 'algemene-voorwaarden.index' ? 'active' : '' }}" href="{{ route('algemene-voorwaarden.index') }}">Algemene voorwaarden</a>
+                        <a class="dropdown-item nav-link {{ Route::currentRouteName() == 'privacystatement.index' ? 'active' : '' }}" href="{{ route('privacystatement.index') }}">Privacy statement</a>
+                        <a class="dropdown-item nav-link {{ Route::currentRouteName() == 'cookiestatement.index' ? 'active' : '' }}" href="{{ route('cookiestatement.index') }}">Cookie statement</a>
+                        <a class="dropdown-item nav-link {{ Route::currentRouteName() == 'sitemap.index' ? 'active' : '' }}" href="{{ route('sitemap.index') }}">Sitemap</a>
                     </div>
                 </li>
             </ul>
