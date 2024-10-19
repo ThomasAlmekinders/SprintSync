@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
                 'user_id' => $userId,
                 'street' => 'Oosterhoutstraat',
                 'house_number' => '48',
-                'postal_code' => '9403 NG',
+                'postcode' => '9403 NG',
                 'city' => 'Assen',
                 'country' => 'Nederland',
                 'created_at' => now(),
@@ -83,6 +83,16 @@ class UserSeeder extends Seeder
     private function getUsers(): array
     {
         return [
+            ['first_name' => 'Jordy', 'last_name' => 'Bartelds'],
+            ['first_name' => 'Wouter', 'last_name' => 'Winkel'],
+            ['first_name' => 'Matthijs', 'last_name' => 'Almekinders'],
+            ['first_name' => 'Chris', 'last_name' => 'Almekinders'],
+            ['first_name' => 'Margriet', 'last_name' => 'Almekinders'],
+            ['first_name' => 'Aaron', 'last_name' => 'Almekinders'],
+            ['first_name' => 'Babbette', 'last_name' => 'Almekinders'],
+            ['first_name' => 'Robine', 'last_name' => 'Almekinders'],
+            ['first_name' => 'Danique', 'last_name' => 'Almekinders'],
+            ['first_name' => 'Thomas', 'last_name' => 'Steging'],
             ['first_name' => 'Sophie', 'last_name' => 'Bakker'],
             ['first_name' => 'Lucas', 'last_name' => 'Jansen'],
             ['first_name' => 'Emma', 'last_name' => 'Visser'],
@@ -230,6 +240,16 @@ class UserSeeder extends Seeder
 
     function getAddresses() {
         return [
+            ['street' => 'Deelheugte', 'house_number' => '48', 'postcode' => '9403 NS', 'city' => 'Assen'],
+            ['street' => 'Lariksstraat', 'house_number' => '57', 'postcode' => '9403 KW', 'city' => 'Assen'],
+            ['street' => 'Oosterhoutstraat', 'house_number' => '48', 'postcode' => '9401 NG', 'city' => 'Assen'],
+            ['street' => 'Oosterhoutstraat', 'house_number' => '48', 'postcode' => '9401 NG', 'city' => 'Assen'],
+            ['street' => 'Oosterhoutstraat', 'house_number' => '48', 'postcode' => '9401 NG', 'city' => 'Assen'],
+            ['street' => 'Oosterhoutstraat', 'house_number' => '48', 'postcode' => '9401 NG', 'city' => 'Assen'],
+            ['street' => 'Oosterhoutstraat', 'house_number' => '48', 'postcode' => '9401 NG', 'city' => 'Assen'],
+            ['street' => 'Oosterhoutstraat', 'house_number' => '48', 'postcode' => '9401 NG', 'city' => 'Assen'],
+            ['street' => 'Oosterhoutstraat', 'house_number' => '48', 'postcode' => '9401 NG', 'city' => 'Assen'],
+            ['street' => 'Marsdijkstraat', 'house_number' => '132', 'postcode' => '9405 FF', 'city' => 'Assen'],
             ['street' => 'Hoofdstraat', 'house_number' => '1', 'postcode' => '1011 AB', 'city' => 'Amsterdam'],
             ['street' => 'Lindenlaan', 'house_number' => '10', 'postcode' => '1012 CD', 'city' => 'Amsterdam'],
             ['street' => 'Dorpsstraat', 'house_number' => '20', 'postcode' => '1013 EF', 'city' => 'Amsterdam'],
