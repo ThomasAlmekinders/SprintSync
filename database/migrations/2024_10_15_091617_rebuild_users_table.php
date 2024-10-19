@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
@@ -29,7 +26,7 @@ return new class extends Migration
 
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade')->index();
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade')->index();
             $table->string('street')->nullable();
             $table->string('house_number')->nullable();
             $table->string('city')->nullable();
@@ -37,14 +34,24 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->timestamps();
         });
+
+
+        Schema::create('user_connections', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade')->index()->name('user_connections_user_id');
+            $table->foreignId('connected_user_id')->references('id')->on('users')->onDelete('cascade')->index()->name('user_connections_connected_user_id');
+            $table->timestamps();
+            $table->unique(['user_id', 'connected_user_id']);
+        });
     }
 
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
-    {
+    {   
+        Schema::dropIfExists('user_connections');
+
+        Schema::dropIfExists('addresses');
+
         Schema::table('users', function (Blueprint $table) {
             $table->string('name');
 
@@ -57,10 +64,6 @@ return new class extends Migration
             $table->dropColumn('profile_picture');
 
             $table->dropColumn('is_administrator');
-
         });
-
-
-        Schema::dropIfExists('addresses');
     }
 };
