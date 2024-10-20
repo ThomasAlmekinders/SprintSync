@@ -64,3 +64,9 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
         Route::get('/instellingen', [AdminController::class, 'instellingen'])->name('beheer.instellingen');
     });
 });
+
+
+// Fallback route voor niet-bestaande pagina's (404 PAGINA)
+Route::fallback(function () {
+    return response()->view('layouts.404page', [], 404);
+});
