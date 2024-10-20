@@ -36,4 +36,23 @@ class DashboardController extends Controller
 
         return redirect()->back()->with('success', 'Het scrumbord is aangemaakt!');
     }
+
+    public function updateSettings(Request $request)
+    {
+        $request->validate([
+            'titel' => 'required|string|max:255',
+            'beschrijving' => 'nullable|string',
+            'actief' => 'nullable|boolean',
+        ]);
+
+        $scrumbord = Scrumboard::findOrFail($request->scrumboard_id);
+        $scrumbord->creator_id = auth()->id(); 
+        $scrumbord->title = $request->titel;
+        $scrumbord->description = $request->beschrijving;
+        $scrumbord->active = $request->actief;
+
+        $scrumbord->save();
+
+        return redirect()->back()->with('success', 'De scrumbord instelling zijn bijgewerkt!');
+    }
 }

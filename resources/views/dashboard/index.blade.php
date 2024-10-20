@@ -40,7 +40,7 @@
                                     <div class="scrumboard-creator d-inline-flex flex-column justify-content-center align-middle mb-3">
                                         <span class="small d-none d-lg-block">Aangemaakt door:</span>
                                         <div>
-                                            <a href="/profile/{{ $scrumboard->creator->id }}" class="scrumboard-writer d-inline-flex text-decoration-none">
+                                            <a href="/connecties/bekijk/{{ $scrumboard->creator->first_name }}-{{ $scrumboard->creator->last_name }}/{{ $scrumboard->creator->id }}" class="scrumboard-writer d-inline-flex text-decoration-none">
                                                 <img src="{{ asset('images/profile_pictures/' . $scrumboard->creator->profile_picture) }}" class="mr-3 rounded-circle" width="56" height="56" alt="{{ $scrumboard->creator->first_name }} {{ $scrumboard->creator->last_name }}">
                                                     <span class="font-weight-bold">{{ $scrumboard->creator->first_name }} {{ $scrumboard->creator->last_name }}
                                                         <br />
@@ -51,10 +51,10 @@
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-7 mb-2 mb-sm-0">
-                                    <a href="/dashboard/{{ $scrumboard->id }}" class="btn btn-info w-100 text-white">Bekijk Scrumboard</a>
+                                    <a href="/dashboard/bekijk/{{ Str::slug($scrumboard->title) }}/{{ $scrumboard->id }}" class="btn btn-info w-100 text-white">Bekijk Scrumboard</a>
                                 </div>
                                 <div class="col-12 col-sm-5">
-                                    <button type="button" class="btn btn-secondary w-100" data-bs-toggle="modal" data-bs-target="#editScrumboardModal" data-scrumboard-id="{{ $scrumboard->id }}" data-scrumboard-title="{{ $scrumboard->titel }}" data-scrumboard-description="{{ $scrumboard->beschrijving }}" data-scrumboard-actief="{{ $scrumboard->actief }}">
+                                    <button type="button" class="btn btn-secondary w-100" data-bs-toggle="modal" data-bs-target="#editScrumboardModal" data-scrumboard-creator="{{ $scrumboard->creator_id }}" data-scrumboard-id="{{ $scrumboard->id }}" data-scrumboard-title="{{ $scrumboard->title }}" data-scrumboard-description="{{ $scrumboard->description }}" data-scrumboard-actief="{{ $scrumboard->active }}">
                                         Instellingen
                                     </button>
                                 </div>
@@ -110,11 +110,10 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form id="editScrumboardForm" method="POST" action="/dashboard/update-scrumboard-global">
+            <form id="editScrumboardForm" method="POST" action="{{ route('dashboard.update-scrumboard-settings') }}">
                 @csrf
-                @method('PUT')
                 <input type="hidden" id="scrumboardId" name="scrumboard_id">
-
+                <input type="hidden" id="creatorId" name="creator_id">
                 <div class="modal-body p-4">
                     <div class="form-group mb-2">
                         <label for="editTitel" class="font-weight-bold">Titel</label>
@@ -125,7 +124,8 @@
                         <textarea class="form-control form-control-lg" id="editBeschrijving" name="beschrijving" rows="4" placeholder="Voeg een beschrijving toe"></textarea>
                     </div>
                     <div class="form-check form-switch mb-3">
-                        <input type="checkbox" class="form-check-input ms-1" id="editActief" name="actief">
+                        <input type="hidden" name="actief" value="0" />
+                        <input type="checkbox" class="form-check-input ms-1" id="editActief" name="actief" value="1">
                         <label class="form-check-label" for="editActief">Dit scrumboard activeren/deactiveren</label>
                     </div>
                 </div>
@@ -139,6 +139,28 @@
         </div>
     </div>
 </div>
+
+<script>
+    var editScrumboardModal = document.getElementById('editScrumboardModal');
+    editScrumboardModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+
+        var scrumboardId = button.getAttribute('data-scrumboard-id');
+        var scrumboardTitle = button.getAttribute('data-scrumboard-title');
+        var scrumboardDescription = button.getAttribute('data-scrumboard-description');
+        var scrumboardActief = button.getAttribute('data-scrumboard-actief');
+
+        var modalTitleInput = editScrumboardModal.querySelector('#editTitel');
+        var modalDescriptionTextarea = editScrumboardModal.querySelector('#editBeschrijving');
+        var modalIdInput = editScrumboardModal.querySelector('#scrumboardId');
+        var modalActiefCheckbox = editScrumboardModal.querySelector('#editActief');
+
+        modalTitleInput.value = scrumboardTitle;
+        modalDescriptionTextarea.value = scrumboardDescription;
+        modalIdInput.value = scrumboardId;
+        modalActiefCheckbox.checked = scrumboardActief == 1 ? true : false;
+    });
+</script>
 
 <style>
     .scrumboard-item-title h3 {

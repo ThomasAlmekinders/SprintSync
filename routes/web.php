@@ -31,6 +31,8 @@ Route::middleware('auth')->group(function () {
     Route::prefix('dashboard')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
         Route::post('/create-scrumbord', [DashboardController::class, 'createScrumbord'])->name('dashboard.create-scrumbord');
+        Route::post('/update-scrumboard-settings', [DashboardController::class, 'updateSettings'])->name('dashboard.update-scrumboard-settings');
+        Route::get('/dashboard/bekijk/{slug}/{id}', [DashboardController::class, 'bekijkScrumboard'])->name('dashboard.bekijk-scrumbord');
     });
 
     Route::prefix('mijn-account')->group(function () {
