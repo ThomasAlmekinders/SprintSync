@@ -1,19 +1,21 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Middleware\is_administrator;
+
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ConnectionsController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AdminController;
 
-/* De simpele view routes (zonder controllers) */
 Route::view('/', 'home')->name('home.index');
 Route::view('/functioneel-ontwerp', 'information.functioneel.index')->name('functioneel-ontwerp.index');
 Route::view('/technisch-ontwerp', 'information.technisch.index')->name('technisch-ontwerp.index');
 Route::view('/contact', 'information.contact.index')->name('contact.index');
 Route::view('/sitemap', 'information.sitemap.index')->name('sitemap.index');
 
-/* Groeperen van over-ons routes */
 Route::prefix('over-ons')->group(function () {
     Route::view('/', 'information.about.index')->name('over-ons.index');
     Route::view('/algemene-voorwaarden', 'information.algemeen.index')->name('algemene-voorwaarden.index');
@@ -21,17 +23,13 @@ Route::prefix('over-ons')->group(function () {
     Route::view('/cookie-statement', 'information.cookies.index')->name('cookiestatement.index');
 });
 
-/* Contactformulier route, met throttle (max 5 per minuut) */
 Route::post('/contact/sendform', [FormController::class, 'storeContactFormData'])->name('contact.sendform')->middleware('throttle:5,1');
 
-// Auth routes
 Auth::routes();
 
-/* Beschermde routes (alleen ingelogde gebruikers) */
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
-    /* Account (instellingen) routes */
     Route::prefix('mijn-account')->group(function () {
         Route::get('/profiel', [AccountController::class, 'profiel'])->name('mijn-account.profiel');
         Route::post('/profiel/update-user', [AccountController::class, 'updateProfileUser'])->name('mijn-account.update-profile-user');
@@ -49,11 +47,20 @@ Route::middleware('auth')->group(function () {
         Route::get('/activiteitslog', [AccountController::class, 'activiteitslog'])->name('mijn-account.activiteitslog');
     });
 
-    /* connecties routes */
     Route::prefix('connecties')->group(function () {
         Route::get('/', [ConnectionsController::class, 'index'])->name('connecties.index');
         Route::get('/zoeken', [ConnectionsController::class, 'search'])->name('connecties.zoeken');
         Route::post('/toevoegen/{userId}', [ConnectionsController::class, 'addConnection'])->name('connecties.toevoegen');
         Route::get('/bekijk/{first_name}-{last_name}/{userId}', [ConnectionsController::class, 'viewProfile'])->name('connecties.view');
+    });
+});
+
+
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::prefix('beheer')->group(function () {
+        Route::get('/statistieken', [AdminController::class, 'statistieken'])->name('beheer.statistieken');
+        Route::get('/formulieren', [AdminController::class, 'formulieren'])->name('beheer.formulieren');
+        Route::get('/gebruikers', [AdminController::class, 'gebruikers'])->name('beheer.gebruikers');
+        Route::get('/instellingen', [AdminController::class, 'instellingen'])->name('beheer.instellingen');
     });
 });
