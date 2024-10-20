@@ -28,7 +28,10 @@ Route::post('/contact/sendform', [FormController::class, 'storeContactFormData']
 Auth::routes();
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::post('/create-scrumbord', [DashboardController::class, 'createScrumbord'])->name('dashboard.create-scrumbord');
+    });
 
     Route::prefix('mijn-account')->group(function () {
         Route::get('/profiel', [AccountController::class, 'profiel'])->name('mijn-account.profiel');

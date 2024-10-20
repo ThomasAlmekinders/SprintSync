@@ -67,12 +67,9 @@ class ConnectionsController extends Controller
 
     public function viewProfile($first_name, $last_name, $id)
     {
-        // Zoek de gebruiker op ID
         $user = User::findOrFail($id);
 
-        // Controleer of de opgegeven voor- en achternaam overeenkomen met die van de gevonden gebruiker
         if ($user->first_name !== $first_name || $user->last_name !== $last_name) {
-            // Optioneel: terug naar de juiste URL met de correcte naam
             return redirect()->route('account.connecties.view-profile.index', [
                 'first_name' => $user->first_name,
                 'last_name' => $user->last_name,
@@ -80,10 +77,9 @@ class ConnectionsController extends Controller
             ]);
         }
 
-        // Geef de profielpagina weer met de benodigde gegevens
         return view('account.connecties.view-profile.index', [
             'user' => $user,
-            'scrumbords' => $user->scrumbords, // Neem aan dat dit een relatie is
+            'scrumbords' => $user->scrumbords,
         ]);
     }
 }

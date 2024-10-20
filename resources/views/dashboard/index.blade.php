@@ -71,6 +71,75 @@
     </div>
 </div>
 
+<!-- Create Scrumboard Modal -->
+<div class="modal fade" id="createScrumboardModal" tabindex="-1" role="dialog" aria-labelledby="createScrumboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content shadow-lg">
+            <div class="modal-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="modal-title" id="createScrumboardModalLabel">Nieuw Scrumboard Aanmaken</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form id="createScrumboardForm" method="POST" action="{{ route('dashboard.create-scrumbord') }}">
+                @csrf
+                <div class="modal-body p-4">
+                    <div class="form-group mb-2">
+                        <label for="titel" class="font-weight-bold">Titel</label>
+                        <input type="text" class="form-control form-control-lg" id="titel" name="titel" placeholder="Voer de titel in" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="beschrijving" class="font-weight-bold">Beschrijving</label>
+                        <textarea class="form-control form-control-lg" id="beschrijving" name="beschrijving" rows="4" placeholder="Voeg een beschrijving toe"></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuleren</button>
+                    <button type="submit" class="btn btn-primary btn-block">Aanmaken</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Edit Scrumboard Modal -->
+<div class="modal fade" id="editScrumboardModal" tabindex="-1" role="dialog" aria-labelledby="editScrumboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content shadow-lg">
+            <div class="modal-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="modal-title" id="editScrumboardModalLabel">Scrumboard Bewerken</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form id="editScrumboardForm" method="POST" action="/dashboard/update-scrumboard-global">
+                @csrf
+                @method('PUT')
+                <input type="hidden" id="scrumboardId" name="scrumboard_id">
+
+                <div class="modal-body p-4">
+                    <div class="form-group mb-2">
+                        <label for="editTitel" class="font-weight-bold">Titel</label>
+                        <input type="text" class="form-control form-control-lg" id="editTitel" name="titel" placeholder="Voer de titel in" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editBeschrijving" class="font-weight-bold">Beschrijving</label>
+                        <textarea class="form-control form-control-lg" id="editBeschrijving" name="beschrijving" rows="4" placeholder="Voeg een beschrijving toe"></textarea>
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <input type="checkbox" class="form-check-input ms-1" id="editActief" name="actief">
+                        <label class="form-check-label" for="editActief">Dit scrumboard activeren/deactiveren</label>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuleren</button>
+                    <button type="submit" class="btn btn-primary btn-block">Opslaan</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
 <style>
     .scrumboard-item-title h3 {
         max-height: 3em;
