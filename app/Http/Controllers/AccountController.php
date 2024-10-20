@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\File;
 
 use App\Models\User;
 use App\Models\Address;
+use App\Models\UserVisibilitySettings;
 
 class AccountController extends Controller
 {
@@ -124,4 +125,24 @@ class AccountController extends Controller
 
         return back()->with('success', 'Wachtwoord is succesvol gewijzigd!');
     }
+
+    public function updateVisibility(Request $request)
+    {
+        $request->validate([
+            'show_email' => 'boolean',
+            'show_phone' => 'boolean',
+            'show_address' => 'boolean',
+        ]);
+    
+        $user = auth()->user();
+    
+        $visibilitySettings = $user->visibilitySettings ?? new VisibilitySettings();
+        $visibilitySettings->update($request->only([
+            'show_email',
+            'show_phone',
+            'show_address',
+        ]));
+    
+        return back()->with('success', 'Instellingen succesvol bijgewerkt!');
+    }    
 }

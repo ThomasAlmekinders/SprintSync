@@ -12,71 +12,119 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        /* Mijn eigen admin account toevoegen (als deze nog niet bestaat). */
-        if (!DB::table('users')->where('email', 'almekinders.t@gmail.com')->first()) {
-            $userId = DB::table('users')->insertGetId([
-                'email' => 'admin@gmail.com',
-                'email_verified_at' => now(),
-                'password' => Hash::make('admin'),
-                'remember_token' => Str::random(10),
-                'created_at' => now(),
-                'updated_at' => now(),
-                'username' => 'T.A.',
-                'first_name' => 'Thomas',
-                'last_name' => 'Almekinders',
-                'phone_number' => '0615437392',
-                'profile_bio' => 'This is a sample user bio.',
-                'profile_picture' => '/default_profile.svg',
-                'is_administrator' => 1,
-            ]);
-            DB::table('addresses')->insert([
-                'user_id' => $userId,
-                'street' => 'Oosterhoutstraat',
-                'house_number' => '48',
-                'postcode' => '9403 NG',
-                'city' => 'Assen',
-                'country' => 'Nederland',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+        DB::transaction(function () {
+            if (!DB::table('users')->where('email', 'admin@gmail.com')->exists()) {
+                $userId = DB::table('users')->insertGetId([
+                    'email' => 'admin@gmail.com',
+                    'email_verified_at' => now(),
+                    'password' => Hash::make('admin'),
+                    'remember_token' => Str::random(10),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'username' => 'T.A.',
+                    'first_name' => 'Thomas',
+                    'last_name' => 'Almekinders',
+                    'phone_number' => '0615437392',
+                    'profile_bio' => 'This is a sample user bio.',
+                    'profile_picture' => '/default_profile.svg',
+                    'is_administrator' => 1,
+                ]);
 
-
-        /* Een loop om random accounts aan te maken. Met controle voor uniek username/email/telefoonnummer. */
-        $users = $this->getUsers();
-        $addresses = $this->getAddresses();
-
-        foreach ($users as $index => $user) {
-            $username = $this->generateUniqueUsername($user['first_name'], $user['last_name']);
-            $email = $this->generateUniqueEmail($user['first_name'], $user['last_name']);
-            $password = Hash::make('defaultpassword'); 
-            $phoneNumber = $this->generateUniquePhoneNumber();
-            $profileBio = "{$user['first_name']} {$user['last_name']} is a valued user of our platform.";
-
-            $userId = DB::table('users')->insertGetId(array_merge($user, [
-                'username' => $username,
-                'email' => $email,
-                'password' => $password,
-                'phone_number' => $phoneNumber,
-                'profile_bio' => $profileBio,
-                'created_at' => now(),
-                'updated_at' => now(),
-                'remember_token' => Str::random(10),
-                'email_verified_at' => now(),
-                'profile_picture' => '/default_profile.svg',
-                'is_administrator' => 0,
-            ]));
-
-            if (isset($addresses[$index])) {
-                $adres = $addresses[$index];
-                DB::table('addresses')->insert(array_merge($adres, [
+                DB::table('addresses')->insert([
                     'user_id' => $userId,
+                    'street' => 'Oosterhoutstraat',
+                    'house_number' => '48',
+                    'postcode' => '9401 NG',
+                    'city' => 'Assen',
                     'country' => 'Nederland',
                     'created_at' => now(),
                     'updated_at' => now(),
-                ]));
+                ]);
+                
+                DB::table('user_visibility_settings')->insert([
+                    'user_id' => $userId,
+                    'show_email' => 0,
+                    'show_phone' => 0,
+                    'show_address' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                DB::table('activity_logs')->insert([
+                    'user_id' => $userId,
+                    'log_name' => 'Test update',
+                    'log_description' => 'Het wachtwoord is succesvol bijgewerkt.',
+                    'ip_address' => '129.0.0.7',
+                    'user_agent' => 'user:agent::test',
+                    'created_at' => now(),
+                ]);
             }
-        }
+
+            // Loop voor random accounts
+            $users = $this->getUsers();
+            $addresses = $this->getAddresses();
+
+            foreach ($users as $index => $user) {
+                $username = $this->generateUniqueUsername($user['first_name'], $user['last_name']);
+                $email = $this->generateUniqueEmail($user['first_name'], $user['last_name']);
+                $password = Hash::make('defaultpassword'); 
+                $phoneNumber = $this->generateUniquePhoneNumber();
+                $profileBio = "{$user['first_name']} {$user['last_name']} is a valued user of our platform.";
+
+                $userId = DB::table('users')->insertGetId(array_merge($user, [
+                    'username' => $username,
+                    'email' => $email,
+                    'password' => $password,
+                    'phone_number' => $phoneNumber,
+                    'profile_bio' => $profileBio,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'remember_token' => Str::random(10),
+                    'email_verified_at' => now(),
+                    'profile_picture' => '/default_profile.svg',
+                    'is_administrator' => 0,
+                ]));
+
+                if (isset($addresses[$index])) {
+                    $adres = $addresses[$index];
+                    DB::table('addresses')->insert(array_merge($adres, [
+                        'user_id' => $userId,
+                        'country' => 'Nederland',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]));
+                } else {
+                    DB::table('addresses')->insert([
+                        'user_id' => $userId,
+                        'street' => null,
+                        'house_number' => null,
+                        'postcode' => null,
+                        'city' => null,
+                        'country' => 'Nederland',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+                
+                DB::table('user_visibility_settings')->insert([
+                    'user_id' => $userId,
+                    'show_email' => 0,
+                    'show_phone' => 0,
+                    'show_address' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                DB::table('activity_logs')->insert([
+                    'user_id' => $userId,
+                    'log_name' => 'Account aangemaakt',
+                    'log_description' => 'Een nieuw account is aangemaakt.',
+                    'ip_address' => '129.0.0.7',
+                    'user_agent' => 'user:agent::test',
+                    'created_at' => now(),
+                ]);
+            }
+        });
     }
 
 
@@ -242,7 +290,7 @@ class UserSeeder extends Seeder
         return [
             ['street' => 'Deelheugte', 'house_number' => '48', 'postcode' => '9403 NS', 'city' => 'Assen'],
             ['street' => 'Lariksstraat', 'house_number' => '57', 'postcode' => '9403 KW', 'city' => 'Assen'],
-            ['street' => 'Oosterhoutstraat', 'house_number' => '48', 'postcode' => '9401 NG', 'city' => 'Assen'],
+            ['street' => 'Prinses beatrixstraat', 'house_number' => '48', 'postcode' => '9422 HL', 'city' => 'Smilde'],
             ['street' => 'Oosterhoutstraat', 'house_number' => '48', 'postcode' => '9401 NG', 'city' => 'Assen'],
             ['street' => 'Oosterhoutstraat', 'house_number' => '48', 'postcode' => '9401 NG', 'city' => 'Assen'],
             ['street' => 'Oosterhoutstraat', 'house_number' => '48', 'postcode' => '9401 NG', 'city' => 'Assen'],

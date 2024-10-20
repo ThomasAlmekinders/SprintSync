@@ -36,6 +36,18 @@ return new class extends Migration
         });
 
 
+        Schema::create('user_visibility_settings', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade')->index()->name('user_visibility_user_id');
+            
+            $table->boolean('show_email')->default(false);
+            $table->boolean('show_phone')->default(false);
+            $table->boolean('show_address')->default(false);
+                    
+            $table->timestamps();
+        });
+
+
         Schema::create('user_connections', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade')->index()->name('user_connections_user_id');
@@ -49,6 +61,8 @@ return new class extends Migration
     public function down(): void
     {   
         Schema::dropIfExists('user_connections');
+        
+        Schema::dropIfExists('user_visibility_settings');
 
         Schema::dropIfExists('addresses');
 

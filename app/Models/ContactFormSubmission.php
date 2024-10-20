@@ -9,7 +9,6 @@ class ContactFormSubmission extends Model
 {
     use HasFactory;
 
-    // Vulbare velden
     protected $fillable = [
         'first_name',
         'last_name',

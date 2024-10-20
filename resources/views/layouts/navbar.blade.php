@@ -10,6 +10,11 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav ms-auto text-center" style="margin-right: calc(5vw + 2rem);">
+                @auth
+                <li class="nav-item">
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.index' ? 'active' : '' }}" href="{{ route('dashboard.index') }}">Dashboard</a>
+                </li>
+                @endauth
                 <li class="nav-item dropdown">
                     <span class="nav-link dropdown-toggle" id="informatieDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="cursor: pointer;">
                         Informatie

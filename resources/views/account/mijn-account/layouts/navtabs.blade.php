@@ -9,7 +9,7 @@
         <a class="nav-link {{ Route::currentRouteName() == 'mijn-account.wachtwoord' ? 'active' : '' }}" href="{{ route('mijn-account.wachtwoord') }}">Wachtwoord wijzigen</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a class="nav-link {{ Route::currentRouteName() == 'mijn-account.voorkeuren' ? 'active' : '' }}" href="{{ route('mijn-account.voorkeuren') }}">Meldingen & Voorkeuren</a>
+        <a class="nav-link {{ Route::currentRouteName() == 'mijn-account.voorkeuren' ? 'active' : '' }}" href="{{ route('mijn-account.voorkeuren') }}">Voorkeuren & Meldingen</a>
     </li>
     <li class="nav-item" role="presentation">
         <a class="nav-link {{ Route::currentRouteName() == 'mijn-account.activiteitslog' ? 'active' : '' }}" href="{{ route('mijn-account.activiteitslog') }}">Activiteitslog</a>

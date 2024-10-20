@@ -92,7 +92,7 @@
         const overlay = document.createElement('div');
 
         if (!getCookie('modalClosed')) {
-            welcomeModal.classList.add('zoom-in', 'show'); // Voeg zoom-in toe
+            welcomeModal.classList.add('zoom-in', 'show');
             welcomeModal.style.display = 'block';
             overlay.classList.add('show');
             document.body.classList.add('modal-open');
@@ -102,7 +102,7 @@
 
         closeModalButtons.forEach(button => {
             button.addEventListener('click', function () {
-                closeModal(); // Gebruik de closeModal functie
+                closeModal();
             });
         });
 
@@ -133,54 +133,3 @@
         }
     });
 </script>
-
-<style>
-    /* Zoom In */
-    .modal.zoom-in {
-        animation: zoomIn 0.5s forwards;
-    }
-
-    /* Zoom Out */
-    .modal.zoom-out {
-        animation: zoomOut 0.5s forwards;
-    }
-
-    @keyframes zoomIn {
-        0% {
-            transform: scale(0);
-            opacity: 0;
-        }
-        100% {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
-
-    @keyframes zoomOut {
-        0% {
-            transform: scale(1);
-            opacity: 1;
-        }
-        100% {
-            transform: scale(0);
-            opacity: 0;
-        }
-    }
-
-    @keyframes bounce {
-        0%, 20%, 50%, 80%, 100% {
-            transform: scale(1);
-        }
-        40% {
-            transform: scale(1.1);
-        }
-        60% {
-            transform: scale(1.05);
-        }
-    }
-
-    .modal.bounce {
-        animation: bounce 0.5s;
-    }
-
-</style>

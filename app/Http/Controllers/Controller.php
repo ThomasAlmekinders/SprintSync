@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
+use App\Models\ActivityLog;
+
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
@@ -29,12 +31,15 @@ class Controller extends BaseController
     }
 
     public function voorkeuren()
-    {
-        return view('account.mijn-account.voorkeuren.index');
+    {   
+        $user = auth()->user();
+
+        return view('account.mijn-account.voorkeuren.index', compact('user'));
     }
 
     public function activiteitslog()
     {
-        return view('account.mijn-account.activiteitslog.index');
+        $activityLogs = ActivityLog::where('user_id', auth()->id())->orderBy('created_at', 'desc')->get();
+        return view('account.mijn-account.activiteitslog.index', compact('activityLogs'));
     }
 }
