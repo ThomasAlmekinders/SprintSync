@@ -32,8 +32,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
         Route::post('/create-scrumbord', [DashboardController::class, 'createScrumbord'])->name('dashboard.create-scrumbord');
         Route::post('/update-scrumboard-settings', [DashboardController::class, 'updateSettings'])->name('dashboard.update-scrumboard-settings');
-        Route::get('/dashboard/bekijk/{slug}/{id}', [DashboardController::class, 'bekijkScrumboard'])->name('dashboard.bekijk-scrumbord');
+        
+        Route::prefix('bekijk/{slug}/{id}')->group(function () {
+            Route::get('/', [DashboardController::class, 'bekijkScrumboard'])->name('scrumboard.index');
+            Route::get('/instellingen', [DashboardController::class, 'bekijkScrumboardInstellingen'])->name('scrumboard.instellingen');
+            Route::get('/beschrijving', [DashboardController::class, 'bekijkScrumboardBeschrijving'])->name('scrumboard.beschrijving');
+            Route::get('/takenlijst', [DashboardController::class, 'bekijkScrumboardTakenlijst'])->name('scrumboard.takenlijst');
+            Route::get('/tijdlijn', [DashboardController::class, 'bekijkScrumboardTijdlijn'])->name('scrumboard.tijdlijn');
+        });
     });
+    
 
     Route::prefix('mijn-account')->group(function () {
         Route::get('/profiel', [AccountController::class, 'profiel'])->name('mijn-account.profiel');

@@ -56,18 +56,56 @@ class DashboardController extends Controller
         return redirect()->back()->with('success', 'De scrumbord instelling zijn bijgewerkt!');
     }
 
+
+
     public function bekijkScrumboard($slug, $id)
     {
-        // Haal het scrumboard op met de gegeven id
         $scrumboard = Scrumboard::findOrFail($id);
-    
-        // Controleer of de slug overeenkomt met de slug van het scrumboard
         if ($slug !== \Str::slug($scrumboard->title)) {
-            // Als de slug niet overeenkomt, kun je bijvoorbeeld een 404 error tonen of de gebruiker doorsturen
             abort(404);
         }
     
-        // Geef het scrumboard door aan de view
-        return view('dashboard.view-scrumboard.index', compact('scrumboard'));
+        return view('dashboard.view-scrumboard.beschrijving.index', compact('scrumboard'));
     }    
+
+    public function bekijkScrumboardInstellingen($slug, $id)
+    {
+        $scrumboard = Scrumboard::findOrFail($id);
+        if ($slug !== \Str::slug($scrumboard->title)) {
+            abort(404);
+        }
+
+        return view('dashboard.view-scrumboard.instellingen.index', compact('scrumboard'));
+    }
+
+    public function bekijkScrumboardBeschrijving($slug, $id)
+    {
+        $scrumboard = Scrumboard::findOrFail($id);
+        if ($slug !== \Str::slug($scrumboard->title)) {
+            abort(404);
+        }
+
+        return view('dashboard.view-scrumboard.beschrijving.index', compact('scrumboard'));
+    }
+
+    public function bekijkScrumboardTakenlijst($slug, $id)
+    {
+        $scrumboard = Scrumboard::findOrFail($id);
+        if ($slug !== \Str::slug($scrumboard->title)) {
+            abort(404);
+        }
+
+        return view('dashboard.view-scrumboard.takenlijst.index', compact('scrumboard'));
+    }
+
+    public function bekijkScrumboardTijdlijn($slug, $id)
+    {
+        $scrumboard = Scrumboard::findOrFail($id);
+        if ($slug !== \Str::slug($scrumboard->title)) {
+            abort(404);
+        }
+
+        return view('dashboard.view-scrumboard.tijdlijn.index', compact('scrumboard'));
+    }
+
 }
