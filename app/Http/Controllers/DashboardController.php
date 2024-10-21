@@ -55,4 +55,19 @@ class DashboardController extends Controller
 
         return redirect()->back()->with('success', 'De scrumbord instelling zijn bijgewerkt!');
     }
+
+    public function bekijkScrumboard($slug, $id)
+    {
+        // Haal het scrumboard op met de gegeven id
+        $scrumboard = Scrumboard::findOrFail($id);
+    
+        // Controleer of de slug overeenkomt met de slug van het scrumboard
+        if ($slug !== \Str::slug($scrumboard->title)) {
+            // Als de slug niet overeenkomt, kun je bijvoorbeeld een 404 error tonen of de gebruiker doorsturen
+            abort(404);
+        }
+    
+        // Geef het scrumboard door aan de view
+        return view('dashboard.view-scrumboard.index', compact('scrumboard'));
+    }    
 }

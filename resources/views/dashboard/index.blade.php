@@ -51,7 +51,7 @@
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-7 mb-2 mb-sm-0">
-                                    <a href="/dashboard/bekijk/{{ Str::slug($scrumboard->title) }}/{{ $scrumboard->id }}" class="btn btn-info w-100 text-white">Bekijk Scrumboard</a>
+                                   <a href="{{ route('dashboard.bekijk-scrumbord', ['slug' => Str::slug($scrumboard->title), 'id' => $scrumboard->id]) }}" class="btn btn-info w-100 text-white">Bekijk Scrumboard</a>
                                 </div>
                                 <div class="col-12 col-sm-5">
                                     <button type="button" class="btn btn-secondary w-100" data-bs-toggle="modal" data-bs-target="#editScrumboardModal" data-scrumboard-creator="{{ $scrumboard->creator_id }}" data-scrumboard-id="{{ $scrumboard->id }}" data-scrumboard-title="{{ $scrumboard->title }}" data-scrumboard-description="{{ $scrumboard->description }}" data-scrumboard-actief="{{ $scrumboard->active }}">
@@ -244,9 +244,20 @@
     }
 
     .scrumboard-description {
+        position: relative;
         font-size: 1rem;
         color: #6c757d;
         margin-bottom: 20px;
+    }
+    p.scrumboard-description::after {
+        content: "";
+        display: block;
+        position: absolute;
+        bottom: 0;
+        height: 25px;
+        width: 100%;
+        background: rgba(255, 255, 255);
+        background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
     }
 
     .scrumboard-creator {

@@ -32,12 +32,31 @@
     background: #d05e08;
 }
 
-/* Voor Firefox */
 .scroll-container {
     scrollbar-width: thin;
     scrollbar-color: #ed6809 #d3d3d3;
 }
 
+.table-responsive::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background-color: #ed6809;
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    border-radius: 10px;
+}
+
+.table-responsive {
+    scrollbar-width: thin;
+    scrollbar-color: #ed6809 #f1f1f1;
+}
+  
 
 html {
     padding: 1rem;
