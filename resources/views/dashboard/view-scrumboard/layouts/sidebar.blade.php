@@ -1,8 +1,12 @@
 <nav class="col-md-3 col-lg-2 bg-light sidebar" id="sidebar">
     <div class="d-flex flex-column h-100">
-        <h5 class="mt-3">{{ $scrumboard->title }}</h5>
+        <!-- Scrumboard Titel -->
+        <div class="p-3 bg-primary text-white text-center">
+            <h5 class="mb-0">{{ $scrumboard->title }}</h5>
+        </div>
 
-        <ul class="nav flex-column flex-grow-1" id="accountTab" role="tablist">
+        <!-- Navigatie Items -->
+        <ul class="nav flex-column flex-grow-1 mt-3" id="accountTab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'scrumboard.index' ? 'active' : '' }}" 
                    href="{{ route('scrumboard.index', ['slug' => Str::slug($scrumboard->title), 'id' => $scrumboard->id]) }}">
@@ -35,6 +39,7 @@
             </li>
         </ul>
 
+        <!-- Sluiten Knop -->
         <button class="btn btn-secondary mt-3 d-md-none" id="sidebarClose" style="width: 100%;">
             <i class="bi bi-x"></i> Sluiten
         </button>

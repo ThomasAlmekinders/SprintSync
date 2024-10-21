@@ -71,6 +71,11 @@
         overflow: hidden;
         max-height: 100vh;
     }
+    .sidebar h5 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        border-bottom: 1px solid #fff; /* Subtiele onderlijn */
+    }
 </style>
 
 <script defer>
