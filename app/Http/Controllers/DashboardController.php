@@ -70,12 +70,25 @@ class DashboardController extends Controller
 
     public function bekijkScrumboardInstellingen($slug, $id)
     {
+        $currentUser = auth()->user();
+
+        if (!$currentUser) {
+            return redirect()->route('login')->with('error', 'Je moet ingelogd zijn om deze pagina te bekijken.');
+        }
+
         $scrumboard = Scrumboard::findOrFail($id);
         if ($slug !== \Str::slug($scrumboard->title)) {
             abort(404);
         }
 
-        return view('dashboard.view-scrumboard.instellingen.index', compact('scrumboard'));
+        $connections = $currentUser->connections()
+        ->orderBy('last_name', 'asc')
+        ->orderBy('first_name', 'asc')
+        ->get();
+
+        $selectedConnections = $scrumboard->users()->pluck('users.id')->toArray();
+
+        return view('dashboard.view-scrumboard.instellingen.index', compact('scrumboard', 'connections', 'selectedConnections'));
     }
 
     public function bekijkScrumboardBeschrijving($slug, $id)

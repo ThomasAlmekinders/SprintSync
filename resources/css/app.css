@@ -76,6 +76,10 @@ body {
     background-color: #e9ecef;
 }
 
+.container-fluid {
+    max-width: 1800px;
+}
+
 .navbar-light .navbar-nav .nav-link.active {
     color: #ed6809;
     font-weight: bold;

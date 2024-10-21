@@ -8,6 +8,8 @@ use App\Http\Controllers\FormController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ConnectionsController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ScrumboardController;
+
 use App\Http\Controllers\AdminController;
 
 Route::view('/', 'home')->name('home.index');
@@ -36,6 +38,7 @@ Route::middleware('auth')->group(function () {
         Route::prefix('bekijk/{slug}/{id}')->group(function () {
             Route::get('/', [DashboardController::class, 'bekijkScrumboard'])->name('scrumboard.index');
             Route::get('/instellingen', [DashboardController::class, 'bekijkScrumboardInstellingen'])->name('scrumboard.instellingen');
+                Route::post('/instellingen/update', [ScrumboardController::class, 'updateScrumboardInstellingen'])->name('scrumboard.instellingen.update');
             Route::get('/beschrijving', [DashboardController::class, 'bekijkScrumboardBeschrijving'])->name('scrumboard.beschrijving');
             Route::get('/takenlijst', [DashboardController::class, 'bekijkScrumboardTakenlijst'])->name('scrumboard.takenlijst');
             Route::get('/tijdlijn', [DashboardController::class, 'bekijkScrumboardTijdlijn'])->name('scrumboard.tijdlijn');

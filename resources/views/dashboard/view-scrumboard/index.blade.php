@@ -9,7 +9,6 @@
             <button class="btn btn-primary d-md-none w-100" id="sidebarToggle">
                 <i class="bi bi-list"></i> Menu
             </button>
-            <h1 class="mt-4">Welkom bij {{ $scrumboard->title }}</h1>
 
             @yield('dashboard-content')
         </main>
