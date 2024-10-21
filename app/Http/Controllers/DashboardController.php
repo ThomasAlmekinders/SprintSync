@@ -17,6 +17,10 @@ class DashboardController extends Controller
 
         $scrumboards = $createdScrumboards->merge($addedScrumboards);
 
+        $scrumboards = $scrumboards->sortBy(function ($scrumboard) {
+            return [$scrumboard->active ? 0 : 1, $scrumboard->created_at];
+        });
+
         return view('dashboard.index', compact('scrumboards'));
     }
 
@@ -46,7 +50,6 @@ class DashboardController extends Controller
         ]);
 
         $scrumbord = Scrumboard::findOrFail($request->scrumboard_id);
-        $scrumbord->creator_id = auth()->id(); 
         $scrumbord->title = $request->titel;
         $scrumbord->description = $request->beschrijving;
         $scrumbord->active = $request->actief;

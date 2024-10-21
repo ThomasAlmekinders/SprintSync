@@ -51,12 +51,18 @@
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-7 mb-2 mb-sm-0">
-                                   <a href="{{ route('scrumboard.index', ['slug' => Str::slug($scrumboard->title), 'id' => $scrumboard->id]) }}" class="btn btn-info w-100 text-white">Bekijk Scrumboard</a>
+                                    @if($scrumboard->active === 1)
+                                        <a href="{{ route('scrumboard.index', ['slug' => Str::slug($scrumboard->title), 'id' => $scrumboard->id]) }}" class="btn btn-info w-100 text-white">Bekijk Scrumboard</a>
+                                    @else
+                                    <p class="text-danger text-center p-2 mb-0">Scrumbord disabled</p>
+                                    @endif
                                 </div>
                                 <div class="col-12 col-sm-5">
-                                    <button type="button" class="btn btn-secondary w-100" data-bs-toggle="modal" data-bs-target="#editScrumboardModal" data-scrumboard-creator="{{ $scrumboard->creator_id }}" data-scrumboard-id="{{ $scrumboard->id }}" data-scrumboard-title="{{ $scrumboard->title }}" data-scrumboard-description="{{ $scrumboard->description }}" data-scrumboard-actief="{{ $scrumboard->active }}">
-                                        Instellingen
-                                    </button>
+                                    @if(auth()->user()->id === $scrumboard->creator_id)
+                                        <button type="button" class="btn btn-secondary w-100" data-bs-toggle="modal" data-bs-target="#editScrumboardModal" data-scrumboard-creator="{{ $scrumboard->creator_id }}" data-scrumboard-id="{{ $scrumboard->id }}" data-scrumboard-title="{{ $scrumboard->title }}" data-scrumboard-description="{{ $scrumboard->description }}" data-scrumboard-actief="{{ $scrumboard->active }}">
+                                            Instellingen
+                                        </button>
+                                    @endif
                                 </div>
                             </div>
                         </div>

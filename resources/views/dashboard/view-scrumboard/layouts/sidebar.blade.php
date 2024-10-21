@@ -10,31 +10,31 @@
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'scrumboard.index' ? 'active' : '' }}" 
                    href="{{ route('scrumboard.index', ['slug' => Str::slug($scrumboard->title), 'id' => $scrumboard->id]) }}">
-                    Scrumboard
+                   <i class="bi bi-kanban"></i> Scrumboard
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'scrumboard.takenlijst' ? 'active' : '' }}" 
                    href="{{ route('scrumboard.takenlijst', ['slug' => Str::slug($scrumboard->title), 'id' => $scrumboard->id]) }}">
-                    Takenlijst
+                   <i class="bi bi-card-checklist"></i> Takenlijst
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'scrumboard.tijdlijn' ? 'active' : '' }}" 
                    href="{{ route('scrumboard.tijdlijn', ['slug' => Str::slug($scrumboard->title), 'id' => $scrumboard->id]) }}">
-                    Tijdlijn
+                   <i class="bi bi-clock-history"></i> Tijdlijn
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'scrumboard.instellingen' ? 'active' : '' }}" 
                    href="{{ route('scrumboard.instellingen', ['slug' => Str::slug($scrumboard->title), 'id' => $scrumboard->id]) }}">
-                    Instellingen
+                   <i class="bi bi-gear"></i> Instellingen
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'scrumboard.beschrijving' ? 'active' : '' }}" 
                    href="{{ route('scrumboard.beschrijving', ['slug' => Str::slug($scrumboard->title), 'id' => $scrumboard->id]) }}">
-                    Beschrijving
+                   <i class="bi bi-info-circle"></i> Beschrijving
                 </a>
             </li>
         </ul>
