@@ -40,7 +40,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/instellingen', [DashboardController::class, 'bekijkScrumboardInstellingen'])->name('scrumboard.instellingen');
                 Route::post('/instellingen/update', [ScrumboardController::class, 'updateScrumboardInstellingen'])->name('scrumboard.instellingen.update');
             Route::get('/beschrijving', [DashboardController::class, 'bekijkScrumboardBeschrijving'])->name('scrumboard.beschrijving');
+            
             Route::get('/takenlijst', [DashboardController::class, 'bekijkScrumboardTakenlijst'])->name('scrumboard.takenlijst');
+
             Route::get('/tijdlijn', [DashboardController::class, 'bekijkScrumboardTijdlijn'])->name('scrumboard.tijdlijn');
         });
     });

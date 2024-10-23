@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+
 use App\Models\User;
 use App\Models\Scrumboard;
-use Illuminate\Support\Facades\Auth;
+use App\Models\ScrumboardSprint;
+use App\Models\ScrumboardTask;
 
 class DashboardController extends Controller
 {
@@ -69,7 +72,8 @@ class DashboardController extends Controller
         }
     
         return view('dashboard.view-scrumboard.beschrijving.index', compact('scrumboard'));
-    }    
+    }
+      
 
     public function bekijkScrumboardInstellingen($slug, $id)
     {
@@ -104,15 +108,61 @@ class DashboardController extends Controller
         return view('dashboard.view-scrumboard.beschrijving.index', compact('scrumboard'));
     }
 
+
+
     public function bekijkScrumboardTakenlijst($slug, $id)
     {
-        $scrumboard = Scrumboard::findOrFail($id);
-        if ($slug !== \Str::slug($scrumboard->title)) {
-            abort(404);
-        }
-
-        return view('dashboard.view-scrumboard.takenlijst.index', compact('scrumboard'));
+        $scrumboard = Scrumboard::where('id', $id)->firstOrFail();
+        
+        $sprints = ScrumboardSprint::where('scrumboard_id', $scrumboard->id)->with('tasks')->get();
+        
+        return view('dashboard.view-scrumboard.takenlijst.index', compact('scrumboard', 'sprints'));
     }
+
+    public function createSprint(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'planned_start_date' => 'required|date',
+            'planned_end_date' => 'required|date|after_or_equal:planned_start_date',
+        ]);
+    
+        $scrumboard = Scrumboard::findOrFail($id);
+    
+        ScrumboardSprint::create([
+            'scrumboard_id' => $scrumboard->id,
+            'name' => $request->name,
+            'planned_start_date' => $request->planned_start_date,
+            'planned_end_date' => $request->planned_end_date,
+        ]);
+    
+        return redirect()->route('scrumboard.takenlijst', ['slug' => \Str::slug($scrumboard->title), 'id' => $scrumboard->id])
+            ->with('success', 'Sprint succesvol aangemaakt!');
+    }
+    
+
+    public function createTask(Request $request, $sprintId)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+    
+        $scrumboardSprint = ScrumboardSprint::findOrFail($sprintId);
+        $scrumboard = Scrumboard::findOrFail($scrumboardSprint->scrumboard_id);
+    
+        ScrumboardTask::create([
+            'sprint_id' => $sprintId,
+            'title' => $request->title,
+            'description' => $request->description,
+        ]);
+    
+        return redirect()->route('scrumboard.takenlijst', ['slug' => \Str::slug($scrumboard->title), 'id' => $scrumboard->id])
+            ->with('success', 'Taak succesvol aangemaakt!');
+    }
+    
+
+
 
     public function bekijkScrumboardTijdlijn($slug, $id)
     {

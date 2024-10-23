@@ -31,4 +31,9 @@ class Scrumboard extends Model
     {
         return $this->belongsToMany(User::class, 'scrumboard_user')->withTimestamps();
     }
+
+    public function sprints()
+    {
+        return $this->hasMany(ScrumboardSprint::class, 'scrumboard_id');
+    }
 }
