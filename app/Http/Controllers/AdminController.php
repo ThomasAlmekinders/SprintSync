@@ -30,6 +30,16 @@ class AdminController extends Controller
 
         return view('account.beheer.formulieren.index', compact('contactSubmissions'));
     }
+    public function updateFormSubmissions(Request $request, $id)
+    {
+        $submission = ContactFormSubmission::findOrFail($id);
+        $submission->status = $request->input('status');
+        $submission->save();
+
+        return redirect()
+                ->route('beheer.formulieren')
+                ->with('success', 'formulier is bijgewerkt.');
+    }
     public function deleteFormSubmissions($id) 
     {
         $submission = ContactFormSubmission::findOrFail($id);
@@ -40,10 +50,49 @@ class AdminController extends Controller
                 ->with('success', 'formulier is verwijderd!');
     }
 
-    public function gebruikers()
+    public function showGebruikers(Request $request)
     {
-        return view('account.beheer.gebruikers.index');
+        $perPage = $request->input('per_page', 50);
+        
+        $query = User::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', '%' . $search . '%')
+                ->orWhere('last_name', 'like', '%' . $search . '%')
+                ->orWhere('email', 'like', '%' . $search . '%')
+                ->orWhere('id', 'like', '%' . $search . '%');
+            });
+        }
+
+        $sortField = $request->input('sort_by', 'first_name');
+        $sortOrder = $request->input('sort_order', 'asc');
+
+        $query->orderBy($sortField, $sortOrder);
+
+        $users = $query->paginate($perPage);
+
+        return view('account.beheer.gebruikers.index', [
+            'users' => $users,
+            'sort_by' => $sortField,
+            'sort_order' => $sortOrder,
+            'per_page' => $perPage,
+            'search' => $request->input('search')
+        ]);
     }
+    public function destroyGebruikers($id)
+    {
+        $user = User::findOrFail($id);
+
+        if (auth()->user()->is_administrator && !$user->is_administrator && auth()->id() !== $user->id) {
+            $user->delete();
+            return redirect()->route('beheer.gebruikers')->with('success', 'Gebruiker succesvol verwijderd.');
+        }
+
+        return redirect()->route('beheer.gebruikers')->with('error', 'Je hebt geen toestemming om deze gebruiker te verwijderen.');
+    }
+
 
     public function instellingen()
     {
