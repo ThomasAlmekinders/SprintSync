@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -119,26 +120,36 @@ class DashboardController extends Controller
         return view('dashboard.view-scrumboard.takenlijst.index', compact('scrumboard', 'sprints'));
     }
 
-    public function createSprint(Request $request, $id)
+    public function createSprint(Request $request, $slug, $id)
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'description' => 'string|max:255',
             'planned_start_date' => 'required|date',
             'planned_end_date' => 'required|date|after_or_equal:planned_start_date',
         ]);
     
-        $scrumboard = Scrumboard::findOrFail($id);
+        try {
+            $scrumboard = Scrumboard::where('id', $id)->firstOrFail();
+            \Log::info("Scrumboard found", ['scrumboard' => $scrumboard]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            \Log::error("Scrumboard not found", ['id' => $id]);
+            return redirect()->back()->withErrors(['error' => 'Scrumboard niet gevonden.']);
+        }
     
         ScrumboardSprint::create([
             'scrumboard_id' => $scrumboard->id,
             'name' => $request->name,
+            'description' => $request->description,
             'planned_start_date' => $request->planned_start_date,
             'planned_end_date' => $request->planned_end_date,
         ]);
     
-        return redirect()->route('scrumboard.takenlijst', ['slug' => \Str::slug($scrumboard->title), 'id' => $scrumboard->id])
-            ->with('success', 'Sprint succesvol aangemaakt!');
+        return redirect()
+                ->route('scrumboard.takenlijst', ['slug' => \Str::slug($scrumboard->title), 'id' => $scrumboard->id])
+                ->with('success', 'Sprint succesvol aangemaakt!');
     }
+
     
 
     public function createTask(Request $request, $sprintId)
@@ -174,4 +185,15 @@ class DashboardController extends Controller
         return view('dashboard.view-scrumboard.tijdlijn.index', compact('scrumboard'));
     }
 
+
+
+    public function updateSprintOrder(Request $request)
+    {
+        // Logica voor het bijwerken van de sprintvolgorde
+    }
+
+    public function updateTaskOrder(Request $request)
+    {
+        // Logica voor het bijwerken van de taakvolgorde
+    }
 }

@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+
 use App\Models\User;
 use App\Models\Scrumboard;
+use App\Models\ScrumboardSprint;
+use App\Models\ScrumboardTask;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class ScrumboardController extends Controller

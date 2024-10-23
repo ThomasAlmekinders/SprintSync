@@ -9,7 +9,14 @@ class ScrumboardSprint extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['scrumboard_id', 'name', 'planned_start_date', 'planned_end_date'];
+    protected $fillable = [
+        'scrumboard_id', 
+        'name', 
+        'description',
+        'planned_start_date', 
+        'planned_end_date', 
+        'sprint_order',
+    ];
 
     protected $casts = [
         'planned_start_date' => 'datetime',

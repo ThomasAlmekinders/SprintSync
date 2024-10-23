@@ -9,7 +9,14 @@ class ScrumboardTask extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['sprint_id', 'title', 'description', 'status', 'finished_at'];
+    protected $fillable = [
+        'sprint_id', 
+        'title', 
+        'description', 
+        'status', 
+        'finished_at',
+        'task_order',
+    ];
 
     public function sprint()
     {

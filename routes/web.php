@@ -42,6 +42,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/beschrijving', [DashboardController::class, 'bekijkScrumboardBeschrijving'])->name('scrumboard.beschrijving');
             
             Route::get('/takenlijst', [DashboardController::class, 'bekijkScrumboardTakenlijst'])->name('scrumboard.takenlijst');
+            Route::post('/takenlijst/create-sprint', [DashboardController::class, 'createSprint'])->name('scrumboard.takenlijst.create-sprint');
+            Route::post('/takenlijst/create-task', [DashboardController::class, 'createTask'])->name('scrumboard.takenlijst.create-task');
+            Route::post('/takenlijst/update-sprint-order', [DashboardController::class, 'updateSprintOrder'])->name('scrumboard.takenlijst.update-sprint-order');
+            Route::post('/takenlijst/update-task-order', [DashboardController::class, 'updateTaskOrder'])->name('scrumboard.takenlijst.update-task-order');        
+            Route::post('/takenlijst/edit-sprint/{sprintId}', [DashboardController::class, 'editSprint'])->name('scrumboard.takenlijst.edit-sprint');
+            Route::post('/takenlijst/edit-task/{taskId}', [DashboardController::class, 'editTask'])->name('scrumboard.takenlijst.edit-task');    
 
             Route::get('/tijdlijn', [DashboardController::class, 'bekijkScrumboardTijdlijn'])->name('scrumboard.tijdlijn');
         });

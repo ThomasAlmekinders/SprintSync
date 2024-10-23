@@ -30,8 +30,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('scrumboard_id')->references('id')->on('scrumboards')->onDelete('cascade')->name('scrumboard_sprint_scrumboard_id')->index();
             $table->string('name');
+            $table->text('description')->nullable();
             $table->date('planned_start_date');
             $table->date('planned_end_date');
+            $table->integer('sprint_order')->default(0);
             $table->timestamps();
         });
 
@@ -42,6 +44,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->enum('status', ['to_do', 'in_progress', 'done'])->default('to_do');
             $table->timestamp('finished_at')->nullable();
+            $table->integer('task_order')->default(0);
             $table->timestamps();
         });
     }
