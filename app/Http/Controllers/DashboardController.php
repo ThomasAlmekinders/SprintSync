@@ -124,7 +124,7 @@ class DashboardController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'string|max:255',
+            'description' => 'nullable|string|max:255',
             'planned_start_date' => 'required|date',
             'planned_end_date' => 'required|date|after_or_equal:planned_start_date',
         ]);
@@ -152,11 +152,12 @@ class DashboardController extends Controller
 
     
 
-    public function createTask(Request $request, $sprintId)
+    public function createTask(Request $request, $slug, $scrumboardId, $sprintId)
     {
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'status' => 'required|in:todo,in_progress,done',
         ]);
     
         $scrumboardSprint = ScrumboardSprint::findOrFail($sprintId);

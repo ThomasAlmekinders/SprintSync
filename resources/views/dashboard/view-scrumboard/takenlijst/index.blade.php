@@ -1,4 +1,3 @@
-
 @extends('dashboard.view-scrumboard.index')
 
 @section('dashboard-content')
@@ -17,7 +16,7 @@
                 <div class="card-body">
                     <div class="task-list" id="sortable-{{ $sprint->id }}">
                         @foreach($sprint->tasks as $task)
-                            <div class="card task-card mb-3" data-id="{{ $task->id }}">
+                            <div class="card task-card mb-3" data-id="{{ $task->id }}" draggable="true">
                                 <div class="card-body">
                                     <h6 class="card-title">{{ $task->title }}</h6>
                                     <p class="card-text">{{ $task->description }}</p>
@@ -28,6 +27,47 @@
                                 </div>
                             </div>
                         @endforeach
+                    </div>
+                    <button class="btn btn-secondary mt-3 add-task-btn" data-bs-toggle="modal" data-bs-target="#addTaskModal-{{ $sprint->id }}" data-sprint-id="{{ $sprint->id }}">Taak Toevoegen</button>
+                    
+                    <!-- Modal for adding a new task -->
+                    <div class="modal fade" id="addTaskModal-{{ $sprint->id }}" tabindex="-1" role="dialog" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addTaskModalLabel">Nieuwe Taak Aanmaken</h5>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form id="addTaskForm-{{ $sprint->id }}" method="POST" action="{{ route('scrumboard.takenlijst.create-task', ['slug' => Str::slug($scrumboard->title), 'id' => $scrumboard->id, 'sprintId' => $sprint->id]) }}">
+                                    @csrf
+                                    <input type="hidden" name="sprint_id" value="{{ $sprint->id }}">
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="task-title">Taak Titel *</label>
+                                            <input type="text" class="form-control" id="task-title" name="title" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="task-description">Taak Beschrijving</label>
+                                            <textarea class="form-control" id="task-description" name="description"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="task-status">Status *</label>
+                                            <select class="form-control" id="task-status" name="status" required>
+                                                <option value="todo">Te Doen</option>
+                                                <option value="in_progress">In Behandeling</option>
+                                                <option value="done">Klaar</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuleren</button>
+                                        <button type="submit" class="btn btn-primary">Taak Aanmaken</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -54,7 +94,7 @@
                     </div>
                     <div class="form-group">
                         <label for="sprint-description">Sprint beschrijving</label>
-                        <textarea type="text" class="form-control" id="sprint-description" name="description"></textarea>
+                        <textarea class="form-control" id="sprint-description" name="description"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="planned-start-date">Geplande Startdatum *</label>
@@ -73,29 +113,4 @@
         </div>
     </div>
 </div>
-
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-<script>
-$(function() {
-    @foreach($sprints as $sprint)
-        $("#sortable-{{ $sprint->id }}").sortable({
-            update: function(event, ui) {
-                let orderedIds = $(this).sortable('toArray');
-                $.ajax({
-                    url: '{{ route("scrumboard.takenlijst.update-task-order", ["slug" => Str::slug($scrumboard->title), "id" => $scrumboard->id, "taskId" => $task->id]) }}',
-                    method: 'POST',
-                    data: {
-                        order: orderedIds,
-                        sprint_id: {{ $sprint->id }},
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        console.log(response);
-                    }
-                });
-            }
-        });
-    @endforeach
-});
-</script>
 @endsection
