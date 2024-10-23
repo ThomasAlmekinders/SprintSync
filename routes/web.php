@@ -75,7 +75,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::prefix('beheer')->group(function () {
         Route::get('/statistieken', [AdminController::class, 'statistieken'])->name('beheer.statistieken');
-        Route::get('/formulieren', [AdminController::class, 'formulieren'])->name('beheer.formulieren');
+        Route::get('/formulieren', [AdminController::class, 'showFormSubmissions'])->name('beheer.formulieren');
+        Route::post('/formulieren/delete/{id}', [AdminController::class, 'deleteFormSubmissions'])->name('beheer.formulieren.delete');
         Route::get('/gebruikers', [AdminController::class, 'gebruikers'])->name('beheer.gebruikers');
         Route::get('/instellingen', [AdminController::class, 'instellingen'])->name('beheer.instellingen');
     });

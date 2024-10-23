@@ -74,6 +74,8 @@ body {
 
     background: #e9ecef;
     background-color: #e9ecef;
+
+    padding-right: 0 !important
 }
 
 .container-fluid {
