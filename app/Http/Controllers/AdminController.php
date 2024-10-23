@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 use App\Models\User;
@@ -10,10 +11,33 @@ use App\Models\ContactFormSubmission;
 
 class AdminController extends Controller
 {
-    public function statistieken()
+    public function showStatistieken()
     {
-        return view('account.beheer.statistieken.index');
+        // Gebruikersstatistieken
+        $totalUsers = User::count(); // Totaal aantal gebruikers
+        
+        // Registraties per maand
+        $monthlyRegistrations = User::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+            ->groupBy('month')
+            ->pluck('count', 'month');
+
+        // Formulierstatistieken
+        $totalForms = ContactFormSubmission::count(); // Totaal aantal formulieren
+        
+        // Status van formulieren
+        $formStatusCounts = ContactFormSubmission::select('status', DB::raw('count(*) as count'))
+            ->groupBy('status')
+            ->pluck('count', 'status');
+        
+        // Formulieren per maand
+        $monthlyForms = ContactFormSubmission::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+            ->groupBy('month')
+            ->pluck('count', 'month');
+
+        return view('account.beheer.statistieken.index', compact('totalUsers', 'monthlyRegistrations', 'totalForms', 'formStatusCounts', 'monthlyForms'));
     }
+
+
 
     public function showFormSubmissions()
     {
@@ -49,6 +73,8 @@ class AdminController extends Controller
                 ->route('beheer.formulieren')
                 ->with('success', 'formulier is verwijderd!');
     }
+
+
 
     public function showGebruikers(Request $request)
     {
@@ -92,6 +118,7 @@ class AdminController extends Controller
 
         return redirect()->route('beheer.gebruikers')->with('error', 'Je hebt geen toestemming om deze gebruiker te verwijderen.');
     }
+
 
 
     public function instellingen()

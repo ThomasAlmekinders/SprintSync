@@ -74,7 +74,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::prefix('beheer')->group(function () {
-        Route::get('/statistieken', [AdminController::class, 'statistieken'])->name('beheer.statistieken');
+        Route::get('/statistieken', [AdminController::class, 'showStatistieken'])->name('beheer.statistieken');
 
         Route::get('/formulieren', [AdminController::class, 'showFormSubmissions'])->name('beheer.formulieren');
         Route::post('/formulieren/update/{id}', [AdminController::class, 'updateFormSubmissions'])->name('beheer.formulieren.update');
