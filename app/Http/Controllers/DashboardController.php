@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Livewire\Component;
 
 use App\Models\User;
 use App\Models\Scrumboard;
@@ -24,6 +25,7 @@ class DashboardController extends Controller
         $scrumboards = $scrumboards->sortBy(function ($scrumboard) {
             return [$scrumboard->active ? 0 : 1, $scrumboard->created_at];
         });
+
 
         return view('dashboard.index', compact('scrumboards'));
     }
@@ -90,9 +92,9 @@ class DashboardController extends Controller
         }
 
         $connections = $currentUser->connections()
-        ->orderBy('last_name', 'asc')
-        ->orderBy('first_name', 'asc')
-        ->get();
+                                    ->orderBy('last_name', 'asc')
+                                    ->orderBy('first_name', 'asc')
+                                    ->get();
 
         $selectedConnections = $scrumboard->users()->pluck('users.id')->toArray();
 
@@ -115,7 +117,11 @@ class DashboardController extends Controller
     {
         $scrumboard = Scrumboard::where('id', $id)->firstOrFail();
         
-        $sprints = ScrumboardSprint::where('scrumboard_id', $scrumboard->id)->with('tasks')->get();
+        $sprints = ScrumboardSprint::where('scrumboard_id', $scrumboard->id)
+                                    ->with(['tasks' => function ($query) {
+                                        $query->orderBy('task_order', 'asc');
+                                    }])
+                                    ->get();
         
         return view('dashboard.view-scrumboard.takenlijst.index', compact('scrumboard', 'sprints'));
     }
@@ -149,30 +155,76 @@ class DashboardController extends Controller
                 ->route('scrumboard.takenlijst', ['slug' => \Str::slug($scrumboard->title), 'id' => $scrumboard->id])
                 ->with('success', 'Sprint succesvol aangemaakt!');
     }
+    public function deleteSprint(Request $request, $slug, $scrumboardId, $sprintId)
+    {
+        $scrumboard = Scrumboard::where('id', $scrumboardId)->firstOrFail();
+        $sprint = ScrumboardSprint::findOrFail($sprintId);
+        $sprint->delete();
+
+        return redirect()
+                ->route('scrumboard.takenlijst', ['slug' => \Str::slug($scrumboard->title), 'id' => $scrumboard->id])
+                ->with('success', 'Sprint succesvol verwijderd!');
+    }
 
     
 
     public function createTask(Request $request, $slug, $scrumboardId, $sprintId)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'required|in:todo,in_progress,done',
+            'createTitle' => 'required|string|max:255',
+            'createDescription' => 'nullable|string',
+            'createStatus' => 'required|in:to_do,in_progress,done',
         ]);
     
         $scrumboardSprint = ScrumboardSprint::findOrFail($sprintId);
         $scrumboard = Scrumboard::findOrFail($scrumboardSprint->scrumboard_id);
-    
+        
         ScrumboardTask::create([
             'sprint_id' => $sprintId,
-            'title' => $request->title,
-            'description' => $request->description,
+            'title' => $request->createTitle,
+            'description' => $request->createDescription,
+            'status' => $request->createStatus,
         ]);
     
         return redirect()->route('scrumboard.takenlijst', ['slug' => \Str::slug($scrumboard->title), 'id' => $scrumboard->id])
             ->with('success', 'Taak succesvol aangemaakt!');
     }
+    public function editTask(Request $request, $slug, $scrumboardId, $sprintId, $taskId)
+    {
+        $request->validate([
+            'createTitle' => 'required|string|max:255',
+            'createDescription' => 'nullable|string',
+            'createStatus' => 'required|in:to_do,in_progress,done',
+        ]);
+        
+        $scrumboardSprint = ScrumboardSprint::findOrFail($sprintId);
+        $scrumboard = Scrumboard::findOrFail($scrumboardSprint->scrumboardId);
+        $task = ScrumboardTask::findOrFail($taskId);
     
+        $task->update([
+            'title' => $request->createTitle,
+            'description' => $request->createDescription,
+            'status' => $request->createStatus,
+        ]);
+    
+        return redirect()->route('scrumboard.takenlijst', ['slug' => \Str::slug($scrumboard->title), 'id' => $scrumboard->id])
+            ->with('success', 'Taak succesvol bijgewerkt!');
+    }
+    public function deleteTask(Request $request, $slug, $scrumboardId, $sprintId, $taskId)
+    {
+        $scrumboard = Scrumboard::findOrFail($scrumboardId);
+        $task = ScrumboardTask::findOrFail($taskId);
+        $task->delete();
+
+        return redirect()->route('scrumboard.takenlijst', ['slug' => \Str::slug($scrumboard->title), 'id' => $scrumboard->id])
+            ->with('success', 'Taak succesvol verwijderd!');
+    }
+    public function updateTaskOrder($tasks)
+    {
+        foreach ($tasks as $task) {
+            Task::whereId($task['value'])->update(['task_order' => $task['task_order']]);
+        }
+    }
 
 
 
@@ -184,17 +236,5 @@ class DashboardController extends Controller
         }
 
         return view('dashboard.view-scrumboard.tijdlijn.index', compact('scrumboard'));
-    }
-
-
-
-    public function updateSprintOrder(Request $request)
-    {
-        // Logica voor het bijwerken van de sprintvolgorde
-    }
-
-    public function updateTaskOrder(Request $request)
-    {
-        // Logica voor het bijwerken van de taakvolgorde
     }
 }

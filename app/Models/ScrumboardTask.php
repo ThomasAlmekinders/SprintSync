@@ -9,6 +9,8 @@ class ScrumboardTask extends Model
 {
     use HasFactory;
 
+    //public static $status = ["to_do", "in_progress", "done"];
+
     protected $fillable = [
         'sprint_id', 
         'title', 
