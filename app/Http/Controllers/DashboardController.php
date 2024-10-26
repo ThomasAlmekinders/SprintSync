@@ -159,6 +159,7 @@ class DashboardController extends Controller
     {
         $scrumboard = Scrumboard::where('id', $scrumboardId)->firstOrFail();
         $sprint = ScrumboardSprint::findOrFail($sprintId);
+        $sprint->tasks()->delete();
         $sprint->delete();
 
         return redirect()
