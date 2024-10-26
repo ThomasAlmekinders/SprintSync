@@ -8,7 +8,7 @@
 
         <div id="sprintAccordion">
             @foreach($sprints as $index => $sprint)
-                <div class="accordion-item card mb-5"> <!-- Extra margin voor witruimte -->
+                <div class="accordion-item card mb-5">
                     <h2 class="accordion-header card-header" id="heading-{{ $sprint->id }}">
                         <input type="hidden" name="scrumboard_id" value="{{ $scrumboard->id }}">
                         <input type="hidden" name="sprint_id" value="{{ $sprint->id }}">
@@ -30,12 +30,12 @@
 
                     <div id="collapse-{{ $sprint->id }}" class="accordion-collapse collapse show {{ $index === 0 ? 'show' : '' }}" aria-labelledby="heading-{{ $sprint->id }}" style="padding: 1rem;">
                         <div class="accordion-body">
-                            <div class="task-list" id="sortable-{{ $sprint->id }}" wire:sortable="updateTaskOrder">
+                            <div class="task-list sortable" id="sortable-{{ $sprint->id }}" data-sprint-slug="{{ Str::slug($scrumboard->title) }}" data-sprint-scrumbord-id="{{ $scrumboard->id }}" data-sprint-id="{{ $sprint->id }}">
                                 @foreach($sprint->tasks as $task)
-                                    <div class="card task-card mb-3 border-0 shadow-sm" wire:sortable.item="{{ $task->id }}" wire:key="task-{{ $task->id }}" data-id="{{ $task->id }}" draggable="true">
+                                    <div class="card task-card mb-3 border-0 shadow-sm" data-id="{{ $task->id }}" draggable="true">
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between">
-                                                <h6 class="card-title mb-1" wire:sortable.handle>{{ $task->title }}</h6>
+                                                <h6 class="card-title mb-1">{{ $task->title }}</h6>
                                                 <span class="badge 
                                                     @if($task->status === 'todo') bg-danger 
                                                     @elseif($task->status === 'in_progress') bg-warning 
@@ -86,6 +86,49 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+<script defer>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.sortable').forEach(sortableElement => {
+            const srumboardSlug = sortableElement.getAttribute('data-sprint-slug');
+            const scrumboardId = sortableElement.getAttribute('data-sprint-scrumbord-id');
+            const sprintId = sortableElement.getAttribute('data-sprint-id');
+
+            const actionUrl = `{{ route('scrumboard.takenlijst.update-task-order', ['slug' => '__SLUG__', 'id' => '__ID__', 'sprintId' => '__SPRINT_ID__']) }}`;
+            const finalUrl = actionUrl.replace('__SLUG__', srumboardSlug)
+                                        .replace('__ID__', scrumboardId)
+                                        .replace('__SPRINT_ID__', sprintId);
+
+            new Sortable(sortableElement, {
+                animation: 150,
+                onEnd: function () {
+                    const orderedTaskIds = Array.from(sortableElement.children).map(item => item.getAttribute('data-id'));
+
+                    fetch(finalUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ 
+                            task_order: orderedTaskIds 
+                        })
+                    })
+                    .then(response => {
+                        return response.text().then(text => {
+                            console.log("Response text:", text);
+                            return JSON.parse(text);
+                        });
+                    })
+                    .then(data => {
+                        console.log('Order updated:', data);
+                    })
+                    .catch(error => console.error('Error updating order:', error));
+                }
+            });
+        });
+    });
+</script>
 <script defer>
     document.addEventListener("DOMContentLoaded", function() {
         const editTaskButtons = document.querySelectorAll('.edit-task-button');
@@ -136,7 +179,6 @@
             const sprintId = createTaskButton.getAttribute('data-sprint-id');
 
             const actionUrl = `{{ route('scrumboard.takenlijst.create-task', ['slug' => '__SLUG__', 'id' => '__ID__', 'sprintId' => '__SPRINT_ID__']) }}`;
-
             const finalUrl = actionUrl
                 .replace('__SLUG__', sprintSlug)
                 .replace('__ID__', scrumboardId)

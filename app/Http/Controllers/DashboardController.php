@@ -219,12 +219,19 @@ class DashboardController extends Controller
         return redirect()->route('scrumboard.takenlijst', ['slug' => \Str::slug($scrumboard->title), 'id' => $scrumboard->id])
             ->with('success', 'Taak succesvol verwijderd!');
     }
-    public function updateTaskOrder($tasks)
-    {
-        foreach ($tasks as $task) {
-            Task::whereId($task['value'])->update(['task_order' => $task['task_order']]);
-        }
+    public function updateTaskOrder(Request $request, $slug, $scrumId, $sprintId)
+{
+    $order = $request->input('task_order');
+
+    foreach ($order as $index => $taskId) {
+        ScrumboardTask::where('id', $taskId)
+            ->where('sprint_id', $sprintId)
+            ->update(['task_order' => $index + 1]);
     }
+
+    return response()->json(['message' => 'Taakvolgorde succesvol bijgewerkt']);
+}
+
 
 
 
