@@ -34,6 +34,7 @@ return new class extends Migration
             $table->date('planned_start_date');
             $table->date('planned_end_date');
             $table->integer('sprint_order')->default(0);
+            $table->enum('status', ['open', 'closed'])->default('open');
             $table->timestamps();
         });
 

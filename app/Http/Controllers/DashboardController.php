@@ -70,11 +70,9 @@ class DashboardController extends Controller
     public function bekijkScrumboard($slug, $id)
     {
         $scrumboard = Scrumboard::findOrFail($id);
-        if ($slug !== \Str::slug($scrumboard->title)) {
-            abort(404);
-        }
-    
-        return view('dashboard.view-scrumboard.beschrijving.index', compact('scrumboard'));
+        $sprints = ScrumboardSprint::where('scrumboard_id', $id)->get();
+
+        return view('dashboard.view-scrumboard.scrumboard.index', compact('scrumboard', 'sprints'));
     }
       
 
@@ -210,6 +208,7 @@ class DashboardController extends Controller
     
         return redirect()->route('scrumboard.takenlijst', ['slug' => \Str::slug($scrumboard->title), 'id' => $scrumboard->id])
             ->with('success', 'Taak succesvol bijgewerkt!');
+        // return response()->json(['message' => 'Taakvolgorde succesvol bijgewerkt']);
     }
     public function deleteTask(Request $request, $slug, $scrumboardId, $sprintId, $taskId)
     {
