@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/takenlijst/update-task-order/{sprintId}', [DashboardController::class, 'updateTaskOrder'])->name('scrumboard.takenlijst.update-task-order');        
             Route::post('/takenlijst/edit-sprint/{sprintId}', [DashboardController::class, 'editSprint'])->name('scrumboard.takenlijst.edit-sprint');
             Route::post('/takenlijst/edit-task/{sprintId}/{taskId}', [DashboardController::class, 'editTask'])->name('scrumboard.takenlijst.edit-task');
+            Route::post('/takenlijst/appoint-task/{sprintId}/{taskId}', [DashboardController::class, 'appointTask'])->name('scrumboard.takenlijst.appoint-task');
             Route::delete('/takenlijst/delete-sprint/{sprintId}', [DashboardController::class, 'deleteSprint'])->name('scrumboard.takenlijst.delete-sprint');
             Route::delete('/takenlijst/delete-task/{sprintId}/{taskId}', [DashboardController::class, 'deleteTask'])->name('scrumboard.takenlijst.delete-task');
 

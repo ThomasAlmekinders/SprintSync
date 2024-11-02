@@ -210,6 +210,24 @@ class DashboardController extends Controller
         return redirect()->route('scrumboard.takenlijst', ['slug' => \Str::slug($scrumboard->title), 'id' => $scrumboard->id])
             ->with('success', 'Taak succesvol bijgewerkt!');
     }
+    public function appointTask(Request $request, $slug, $scrumboardId, $sprintId, $taskId)
+    {
+        $request->validate([
+            'person_id' => 'nullable|integer|exists:users,id',
+        ]);
+        
+        $scrumboardSprint = ScrumboardSprint::findOrFail($sprintId);
+        $scrumboard = Scrumboard::findOrFail($scrumboardSprint->scrumboard_id);
+        $task = ScrumboardTask::findOrFail($taskId);
+
+        $task->update([
+            'assigned_user_id' => $request->person_id,
+        ]);
+
+        return redirect()->route('scrumboard.takenlijst', ['slug' => \Str::slug($scrumboard->title), 'id' => $scrumboard->id])
+            ->with('success', 'Taak succesvol bijgewerkt!');
+    }
+
     public function deleteTask(Request $request, $slug, $scrumboardId, $sprintId, $taskId)
     {
         $scrumboard = Scrumboard::findOrFail($scrumboardId);

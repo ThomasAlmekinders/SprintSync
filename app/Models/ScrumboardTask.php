@@ -16,6 +16,7 @@ class ScrumboardTask extends Model
         'title', 
         'description', 
         'status', 
+        'assigned_user_id',
         'finished_at',
         'task_order',
     ];
@@ -24,4 +25,10 @@ class ScrumboardTask extends Model
     {
         return $this->belongsTo(ScrumboardSprint::class, 'sprint_id');
     }
+
+    public function assignedUser()
+    {
+        return $this->belongsTo(User::class, 'assigned_user_id');
+    }
+
 }

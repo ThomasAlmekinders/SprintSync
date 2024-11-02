@@ -46,18 +46,20 @@
                                                 </span>
                                             </div>
                                             <p class="card-text text-muted">{{ $task->description }}</p>
-                                            <a href="#" 
-                                                class="btn text-primary edit-task-button" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#createTaskModal"
-                                                data-sprint-slug="{{ Str::slug($scrumboard->title) }}"
-                                                data-sprint-scrumbord-id="{{ $scrumboard->id }}"
-                                                data-sprint-id="{{ $sprint->id }}"
-                                                data-task-id="{{ $task->id }}"
-                                                data-task-title="{{ $task->title }}"
-                                                data-task-description="{{ $task->description }}"
-                                                data-task-status="{{ $task->status }}">
+
+                                            @if($task->assigned_user_id)
+                                                <p class="card-text mb-2"><strong>Toegewezen aan:</strong> 
+                                                    {{ optional($task->assignedUser)->first_name ?? 'Onbekend' }} {{ optional($task->assignedUser)->last_name }}
+                                                </p>
+                                            @else
+                                                <p class="card-text mb-2"><strong>Toegewezen aan:</strong> Niemand</p>
+                                            @endif
+
+                                            <a href="#" class="btn text-primary edit-task-button" data-bs-toggle="modal" data-bs-target="#createTaskModal" data-sprint-slug="{{ Str::slug($scrumboard->title) }}" data-sprint-scrumbord-id="{{ $scrumboard->id }}" data-sprint-id="{{ $sprint->id }}" data-task-id="{{ $task->id }}" data-task-title="{{ $task->title }}" data-task-description="{{ $task->description }}" data-task-status="{{ $task->status }}">
                                                 Bewerken
+                                            </a>
+                                            <a href="#" class="btn text-primary link-task-button" data-bs-toggle="modal" data-bs-target="#linkPersonModal" data-sprint-slug="{{ Str::slug($scrumboard->title) }}" data-sprint-scrumbord-id="{{ $scrumboard->id }}" data-sprint-id="{{ $sprint->id }}" data-task-id="{{ $task->id }}" data-task-title="{{ $task->title }}" data-task-description="{{ $task->description }}" data-task-status="{{ $task->status }}">
+                                                Taak toewijzen
                                             </a>
                                             <form action="{{ route('scrumboard.takenlijst.delete-task', ['slug' => Str::slug($scrumboard->title), 'id' => $scrumboard->id, 'sprintId' => $sprint->id, 'taskId' => $task->id]) }}" method="POST" class="d-inline">
                                                 @csrf
@@ -196,6 +198,81 @@
         }
     });
 </script>
+<script defer>
+    document.addEventListener("DOMContentLoaded", function() {
+        const createTaskButtons = document.querySelectorAll('.link-task-button');
+
+        createTaskButtons.forEach((button) => {
+            button.addEventListener('click', function() {
+                openCreateTaskModal(this);
+            });
+        });
+
+        function openCreateTaskModal(createTaskButton) {
+            const sprintSlug = createTaskButton.getAttribute('data-sprint-slug');
+            const scrumboardId = createTaskButton.getAttribute('data-sprint-scrumbord-id');
+            const sprintId = createTaskButton.getAttribute('data-sprint-id');
+            const taskId = createTaskButton.getAttribute('data-task-id');
+
+            const actionUrl = `{{ route('scrumboard.takenlijst.appoint-task', ['slug' => '__SLUG__', 'id' => '__ID__', 'sprintId' => '__SPRINT_ID__', 'taskId' => '__TASK_ID__']) }}`;
+            const finalUrl = actionUrl
+                .replace('__SLUG__', sprintSlug)
+                .replace('__ID__', scrumboardId)
+                .replace('__SPRINT_ID__', sprintId)
+                .replace('__TASK_ID__', taskId);
+
+            console.log("action url: ", finalUrl);
+
+            document.getElementById('linkPersonForm').setAttribute('action', finalUrl);
+            document.getElementById('showTaskHiddenId').setAttribute('value', sprintId);
+        }
+    });
+</script>
+<script defer>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        $('#personSelect').select2({
+            dropdownParent: $('#linkPersonModal'),
+            placeholder: 'Kies een persoon',
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>
+
+<!-- Modal for adding a person to a task -->
+<div class="modal fade" id="linkPersonModal" tabindex="-1" role="dialog" aria-labelledby="linkPersonModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content shadow-lg border-0">
+            <div class="modal-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="modal-title" id="linkPersonModalLabel">Nieuwe Taak Aanmaken</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <form id="linkPersonForm" method="POST" action="">
+                @csrf
+                <input type="hidden" id='showTaskHiddenId' name="sprint_id" value="">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="personSelect">Selecteer een persoon om toe te wijzen</label>
+                        <select class="form-control" id="personSelect" name="person_id" required>
+                            <option value="" disabled selected>Kies een persoon</option>
+                            @foreach($scrumboard->users as $user)
+                                <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuleren</button>
+                    <button type="submit" class="btn btn-primary">Taak toewijzen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <!-- Modal for adding a new task -->
 <div class="modal fade" id="createTaskModal" tabindex="-1" role="dialog" aria-labelledby="createTaskModalLabel" aria-hidden="true">

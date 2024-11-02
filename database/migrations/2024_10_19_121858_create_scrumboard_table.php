@@ -44,6 +44,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->enum('status', ['to_do', 'in_progress', 'done'])->default('to_do');
+            $table->foreignId('assigned_user_id')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->timestamp('finished_at')->nullable();
             $table->integer('task_order')->default(0);
             $table->timestamps();
