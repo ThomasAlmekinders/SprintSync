@@ -196,10 +196,11 @@ class DashboardController extends Controller
             'createStatus' => 'required|in:to_do,in_progress,done',
         ]);
         
+
         $scrumboardSprint = ScrumboardSprint::findOrFail($sprintId);
-        $scrumboard = Scrumboard::findOrFail($scrumboardSprint->scrumboardId);
+        $scrumboard = Scrumboard::findOrFail($scrumboardSprint->scrumboard_id);
         $task = ScrumboardTask::findOrFail($taskId);
-    
+
         $task->update([
             'title' => $request->createTitle,
             'description' => $request->createDescription,
@@ -208,7 +209,6 @@ class DashboardController extends Controller
     
         return redirect()->route('scrumboard.takenlijst', ['slug' => \Str::slug($scrumboard->title), 'id' => $scrumboard->id])
             ->with('success', 'Taak succesvol bijgewerkt!');
-        // return response()->json(['message' => 'Taakvolgorde succesvol bijgewerkt']);
     }
     public function deleteTask(Request $request, $slug, $scrumboardId, $sprintId, $taskId)
     {
