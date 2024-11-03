@@ -40,17 +40,21 @@ Route::middleware('auth')->group(function () {
             Route::get('/instellingen', [DashboardController::class, 'bekijkScrumboardInstellingen'])->name('scrumboard.instellingen');
                 Route::post('/instellingen/update', [ScrumboardController::class, 'updateScrumboardInstellingen'])->name('scrumboard.instellingen.update');
             Route::get('/beschrijving', [DashboardController::class, 'bekijkScrumboardBeschrijving'])->name('scrumboard.beschrijving');
+                Route::post('/beschrijving/store-chat', [DashboardController::class, 'storeChatMessage'])->name('scrumboard.store-chat');
+                Route::post('/beschrijving/edit-chat/{chatId}', [DashboardController::class, 'editChatMessage'])->name('scrumboard.edit-chat');
+                Route::delete('/beschrijving/delete-chat/{chatId}', [DashboardController::class, 'deleteChatMessage'])->name('scrumboard.delete-chat');
+                Route::get('/beschrijving/load-more-chat/{offset}', [DashboardController::class, 'loadMoreChats'])->name('scrumboard.load-more-chats');
             
             Route::get('/takenlijst', [DashboardController::class, 'bekijkScrumboardTakenlijst'])->name('scrumboard.takenlijst');
-            Route::post('/takenlijst/create-sprint', [DashboardController::class, 'createSprint'])->name('scrumboard.takenlijst.create-sprint');
-            Route::post('/takenlijst/create-task/{sprintId}', [DashboardController::class, 'createTask'])->name('scrumboard.takenlijst.create-task');
-            Route::post('/takenlijst/update-task-order/{sprintId}', [DashboardController::class, 'updateTaskOrder'])->name('scrumboard.takenlijst.update-task-order');        
-            Route::post('/takenlijst/update-task-status/{sprintId}', [DashboardController::class, 'updateTaskStatus'])->name('scrumboard.takenlijst.update-task-status');        
-            Route::post('/takenlijst/edit-sprint/{sprintId}', [DashboardController::class, 'editSprint'])->name('scrumboard.takenlijst.edit-sprint');
-            Route::post('/takenlijst/edit-task/{sprintId}/{taskId}', [DashboardController::class, 'editTask'])->name('scrumboard.takenlijst.edit-task');
-            Route::post('/takenlijst/appoint-task/{sprintId}/{taskId}', [DashboardController::class, 'appointTask'])->name('scrumboard.takenlijst.appoint-task');
-            Route::delete('/takenlijst/delete-sprint/{sprintId}', [DashboardController::class, 'deleteSprint'])->name('scrumboard.takenlijst.delete-sprint');
-            Route::delete('/takenlijst/delete-task/{sprintId}/{taskId}', [DashboardController::class, 'deleteTask'])->name('scrumboard.takenlijst.delete-task');
+                Route::post('/takenlijst/create-sprint', [DashboardController::class, 'createSprint'])->name('scrumboard.takenlijst.create-sprint');
+                Route::post('/takenlijst/create-task/{sprintId}', [DashboardController::class, 'createTask'])->name('scrumboard.takenlijst.create-task');
+                Route::post('/takenlijst/update-task-order/{sprintId}', [DashboardController::class, 'updateTaskOrder'])->name('scrumboard.takenlijst.update-task-order');        
+                Route::post('/takenlijst/update-task-status/{sprintId}', [DashboardController::class, 'updateTaskStatus'])->name('scrumboard.takenlijst.update-task-status');        
+                Route::post('/takenlijst/edit-sprint/{sprintId}', [DashboardController::class, 'editSprint'])->name('scrumboard.takenlijst.edit-sprint');
+                Route::post('/takenlijst/edit-task/{sprintId}/{taskId}', [DashboardController::class, 'editTask'])->name('scrumboard.takenlijst.edit-task');
+                Route::post('/takenlijst/appoint-task/{sprintId}/{taskId}', [DashboardController::class, 'appointTask'])->name('scrumboard.takenlijst.appoint-task');
+                Route::delete('/takenlijst/delete-sprint/{sprintId}', [DashboardController::class, 'deleteSprint'])->name('scrumboard.takenlijst.delete-sprint');
+                Route::delete('/takenlijst/delete-task/{sprintId}/{taskId}', [DashboardController::class, 'deleteTask'])->name('scrumboard.takenlijst.delete-task');
 
             Route::get('/tijdlijn', [DashboardController::class, 'bekijkScrumboardTijdlijn'])->name('scrumboard.tijdlijn');
         });

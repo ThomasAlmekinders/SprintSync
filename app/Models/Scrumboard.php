@@ -36,4 +36,10 @@ class Scrumboard extends Model
     {
         return $this->hasMany(ScrumboardSprint::class, 'scrumboard_id');
     }
+
+    public function chats()
+    {
+        return $this->hasMany(ScrumboardChat::class);
+    }
+
 }

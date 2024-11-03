@@ -83,4 +83,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Scrumboard::class, 'scrumboard_user', 'user_id', 'scrumboard_id');
     }
+
+    public function chats()
+    {
+        return $this->hasMany(ScrumboardChat::class);
+    }
+
 }

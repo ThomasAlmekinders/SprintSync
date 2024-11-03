@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Scrumboard;
 use App\Models\ScrumboardSprint;
 use App\Models\ScrumboardTask;
+use App\Models\ScrumboardChat;
 
 class DashboardController extends Controller
 {
@@ -99,14 +100,67 @@ class DashboardController extends Controller
         return view('dashboard.view-scrumboard.instellingen.index', compact('scrumboard', 'connections', 'selectedConnections'));
     }
 
-    public function bekijkScrumboardBeschrijving($slug, $id)
+
+    public function bekijkScrumboardBeschrijving(Request $request, $slug, $id)
     {
         $scrumboard = Scrumboard::findOrFail($id);
-        if ($slug !== \Str::slug($scrumboard->title)) {
-            abort(404);
-        }
+        $chats = ScrumboardChat::where('scrumboard_id', $id)->take(5)->get();
 
-        return view('dashboard.view-scrumboard.beschrijving.index', compact('scrumboard'));
+        return view('dashboard.view-scrumboard.beschrijving.index', compact('scrumboard', 'chats'));
+    }
+    public function storeChatMessage(Request $request, $slug, $scrumboardId) {
+        
+        $request->validate([
+            'message' => 'required|string|max:1000',
+        ]);
+
+        $scrumboard = Scrumboard::findOrFail($scrumboardId);
+        ScrumboardChat::create([
+            'user_id' => auth()->id(),
+            'scrumboard_id' => $scrumboard->id,
+            'message' => $request->message,
+        ]);
+
+        return redirect()
+                ->route('scrumboard.beschrijving', ['slug' => $scrumboard->title, 'id' => $scrumboard->id])
+                ->with('success', 'Bericht succesvol verzonden!');
+    }
+    public function editChatMessage(Request $request, $slug, $scrumboardId, $chatID) {
+        $request->validate([
+            'new_message' => 'required|string|max:255',
+        ]);
+        
+        $scrumboard = Scrumboard::findOrFail($scrumboardId);
+        $chat = ScrumboardChat::findOrFail($chatID);
+        $chat->message = $request->new_message;
+        $chat->save();
+    
+        return redirect()
+            ->route('scrumboard.beschrijving', ['slug' => $slug, 'id' => $scrumboard->id])
+            ->with('success', 'Bericht succesvol bijgewerkt!');
+    }
+    
+    public function deleteChatMessage(Request $request, $slug, $scrumboardId, $chatID) {
+
+        $scrumboard = Scrumboard::findOrFail($scrumboardId);
+        $chat = ScrumboardChat::findOrFail($chatID);
+        $chat->delete();
+    
+        return redirect()
+            ->route('scrumboard.beschrijving', ['slug' => $slug, 'id' => $scrumboard->id])
+            ->with('success', 'Bericht succesvol verwijderd!');
+    }
+    public function loadMoreChats(Request $request, $slug, $id, $offset)
+    {
+        $limit = 5; // Aantal berichten per aanvraag
+        $chats = ScrumboardChat::where('scrumboard_id', $id)
+                    ->orderBy('created_at', 'asc')
+                    ->skip($offset)
+                    ->take($limit)
+                    ->with('user')
+                    ->get();
+
+        return response()->json($chats);
     }
 
 

@@ -49,10 +49,19 @@ return new class extends Migration
             $table->integer('task_order')->default(0);
             $table->timestamps();
         });
+        Schema::create('scrumboard_chat', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade')->name('scrumboard_chat_user_id')->index();
+            $table->foreignId('scrumboard_id')->references('id')->on('scrumboards')->onDelete('cascade')->name('scrumboard_chat_scrumboard_id')->index();
+            $table->text('message');
+            $table->timestamps();
+        });
     }
 
     public function down(): void
     {
+        Schema::dropIfExists('scrumboard_chat');
+
         Schema::dropIfExists('scrumboard_tasks');
 
         Schema::dropIfExists('scrumboard_sprints');
