@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/takenlijst/create-sprint', [DashboardController::class, 'createSprint'])->name('scrumboard.takenlijst.create-sprint');
             Route::post('/takenlijst/create-task/{sprintId}', [DashboardController::class, 'createTask'])->name('scrumboard.takenlijst.create-task');
             Route::post('/takenlijst/update-task-order/{sprintId}', [DashboardController::class, 'updateTaskOrder'])->name('scrumboard.takenlijst.update-task-order');        
+            Route::post('/takenlijst/update-task-status/{sprintId}', [DashboardController::class, 'updateTaskStatus'])->name('scrumboard.takenlijst.update-task-status');        
             Route::post('/takenlijst/edit-sprint/{sprintId}', [DashboardController::class, 'editSprint'])->name('scrumboard.takenlijst.edit-sprint');
             Route::post('/takenlijst/edit-task/{sprintId}/{taskId}', [DashboardController::class, 'editTask'])->name('scrumboard.takenlijst.edit-task');
             Route::post('/takenlijst/appoint-task/{sprintId}/{taskId}', [DashboardController::class, 'appointTask'])->name('scrumboard.takenlijst.appoint-task');

@@ -238,20 +238,32 @@ class DashboardController extends Controller
             ->with('success', 'Taak succesvol verwijderd!');
     }
     public function updateTaskOrder(Request $request, $slug, $scrumId, $sprintId)
-{
-    $order = $request->input('task_order');
+    {
+        $order = $request->input('task_order');
 
-    foreach ($order as $index => $taskId) {
-        ScrumboardTask::where('id', $taskId)
-            ->where('sprint_id', $sprintId)
-            ->update(['task_order' => $index + 1]);
+        foreach ($order as $index => $taskId) {
+            ScrumboardTask::where('id', $taskId)
+                ->where('sprint_id', $sprintId)
+                ->update(['task_order' => $index + 1]);
+        }
+
+        return response()->json(['message' => 'Taakvolgorde succesvol bijgewerkt']);
     }
-
-    return response()->json(['message' => 'Taakvolgorde succesvol bijgewerkt']);
-}
-
-
-
+    public function updateTaskStatus(Request $request, $slug, $scrumId, $sprintId)
+    {
+        $validatedData = $request->validate([
+            'task_id' => 'required|exists:scrumboard_tasks,id',
+            'status' => 'required|string',
+        ]);
+    
+        $task = ScrumboardTask::findOrFail($validatedData['task_id']);
+        $task->update(['status' => $validatedData['status']]);
+    
+        return response()->json(['success' => 'Taakstatus succesvol bijgewerkt']);
+    }
+    
+    
+    
 
     public function bekijkScrumboardTijdlijn($slug, $id)
     {

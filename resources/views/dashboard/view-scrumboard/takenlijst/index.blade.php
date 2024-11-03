@@ -37,7 +37,7 @@
                                             <div class="d-flex justify-content-between">
                                                 <h6 class="card-title mb-1">{{ $task->title }}</h6>
                                                 <span class="badge 
-                                                    @if($task->status === 'todo') bg-danger 
+                                                    @if($task->status === 'to_do') bg-info 
                                                     @elseif($task->status === 'in_progress') bg-warning 
                                                     @else bg-success 
                                                     @endif
