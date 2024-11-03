@@ -5,15 +5,28 @@
     <div class="px-3 py-4">
         <h3 class="mb-4">{{ $scrumboard->title }} - Scrumboard</h3>
 
+        <!-- Sprint select -->
+        <div class="mb-4">
+            <label for="sprint-select">Selecteer een sprint:</label>
+            <select id="sprint-select" class="form-control" multiple onchange="filterTasksBySprint()">
+                @foreach($sprints as $sprint)
+                    <option value="{{ $sprint->id }}" {{ !$sprint->is_completed && $loop->first ? 'selected' : '' }}>
+                        {{ $sprint->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <!-- Task columns -->
         <div class="row d-flex align-items-stretch">
             @foreach (['to_do' => 'Te doen', 'in_progress' => 'Mee bezig', 'done' => 'Afgerond'] as $status => $label)
                 <div class="col">
                     <h4 class="text-{{ $status === 'to_do' ? 'primary' : ($status === 'in_progress' ? 'warning' : 'success') }}">{{ $label }}</h4>
-                    <div class="task-list border rounded p-2 sortable-list" id="list-{{ $status }}" style="background-color: #f9f9f9; height: calc(100% - 2.5rem);">
+                    <div class="task-list border rounded p-2 sortable-list" id="list-{{ $status }}" style="background-color: #f9f9f9; height: calc(100% - 2.5rem);" data-status="{{ $status }}">
                         @foreach($sprints as $sprint)
                             @foreach($sprint->tasks as $task)
                                 @if($task->status === $status)
-                                    <div class="task bg-light border rounded p-2 mb-2 shadow-sm hover-shadow" data-task-id="{{ $task->id }}">
+                                    <div class="task bg-light border rounded p-2 mb-2 shadow-sm hover-shadow" data-task-id="{{ $task->id }}" data-sprint-id="{{ $sprint->id }}">
                                         <div class="text-muted mb-1">
                                             <strong>{{ $sprint->name }}</strong>
                                         </div>
@@ -29,6 +42,39 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+<script defer>
+    document.addEventListener('DOMContentLoaded', function () {
+        $('#sprint-select').select2({
+            placeholder: "Selecteer één of meerdere sprints!"
+        });
+        
+        filterTasksBySprint();
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        filterTasksBySprint();
+    });
+
+    function filterTasksBySprint() {
+        const selectedSprintIds = $('#sprint-select').val();
+
+        document.querySelectorAll('.task').forEach(task => {
+            task.style.display = 'none';
+        });
+
+        if (!selectedSprintIds || selectedSprintIds.length === 0) {
+            return;
+        }
+
+        selectedSprintIds.forEach(sprintId => {
+            document.querySelectorAll(`.task[data-sprint-id='${sprintId}']`).forEach(task => {
+                task.style.display = 'block';
+            });
+        });
+    }
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 <script defer>
