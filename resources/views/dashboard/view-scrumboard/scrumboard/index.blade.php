@@ -23,9 +23,12 @@
                 <div class="col">
                     <h4 class="text-{{ $status === 'to_do' ? 'primary' : ($status === 'in_progress' ? 'warning' : 'success') }}">{{ $label }}</h4>
                     <div class="task-list border rounded p-2 sortable-list" id="list-{{ $status }}" style="background-color: #f9f9f9; height: calc(100% - 2.5rem);" data-status="{{ $status }}">
+                        @php $hasTasks = false; @endphp
                         @foreach($sprints as $sprint)
+                            <div class="dataSprintId" data-sprint-id="{{ $sprint->id }}"></div>
                             @foreach($sprint->tasks as $task)
                                 @if($task->status === $status)
+                                    @php $hasTasks = true; @endphp
                                     <div class="task bg-light border rounded p-2 mb-2 shadow-sm hover-shadow" data-task-id="{{ $task->id }}" data-sprint-id="{{ $sprint->id }}">
                                         <div class="text-muted mb-1">
                                             <strong>{{ $sprint->name }}</strong>
@@ -36,6 +39,10 @@
                                 @endif
                             @endforeach
                         @endforeach
+
+                        @if (!$hasTasks)
+                            <p class="text-center text-muted">Geen taken gevonden</p>
+                        @endif
                     </div>
                 </div>
             @endforeach
@@ -79,40 +86,42 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 <script defer>
     document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.sortable-list').forEach(sortableElement => {
-            const scrumboardSlug = '{{ Str::slug($scrumboard->title) }}';
-            const scrumboardId = '{{ $scrumboard->id }}';
-            const sprintId = '{{ $sprint->id }}';
+        if (document.querySelector('.dataSprintId')) {
+            document.querySelectorAll('.sortable-list').forEach(sortableElement => {
+                const scrumboardSlug = '{{ Str::slug($scrumboard->title) }}';
+                const scrumboardId = '{{ $scrumboard->id }}';
+                const sprintId = sortableElement.querySelector('.dataSprintId').getAttribute('data-sprint-id');
 
-            const actionUrl = `{{ route('scrumboard.takenlijst.update-task-status', ['slug' => '__SLUG__', 'id' => '__ID__', 'sprintId' => '__SPRINT_ID__']) }}`;
-            const finalUrl = actionUrl.replace('__SLUG__', scrumboardSlug)
-                                       .replace('__ID__', scrumboardId)
-                                       .replace('__SPRINT_ID__', sprintId);
+                const actionUrl = `{{ route('scrumboard.takenlijst.update-task-status', ['slug' => '__SLUG__', 'id' => '__ID__', 'sprintId' => '__SPRINT_ID__']) }}`;
+                const finalUrl = actionUrl.replace('__SLUG__', scrumboardSlug)
+                                        .replace('__ID__', scrumboardId)
+                                        .replace('__SPRINT_ID__', sprintId);
 
-            new Sortable(sortableElement, {
-                group: 'tasks',
-                animation: 150,
-                onEnd: function (evt) {
-                    const taskId = evt.item.getAttribute('data-task-id');
-                    const newStatus = evt.to.id.replace('list-', '');
+                new Sortable(sortableElement, {
+                    group: 'tasks',
+                    animation: 150,
+                    onEnd: function (evt) {
+                        const taskId = evt.item.getAttribute('data-task-id');
+                        const newStatus = evt.to.id.replace('list-', '');
 
-                    fetch(finalUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({ 
-                            task_id: taskId,
-                            status: newStatus,
+                        fetch(finalUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({ 
+                                task_id: taskId,
+                                status: newStatus,
+                            })
                         })
-                    })
-                    .then(response => response.json())
-                    .catch(error => console.error('Error updating task:', error));
-                }
+                        .then(response => response.json())
+                        .catch(error => console.error('Error updating task:', error));
+                    }
+                });
             });
-        });
+        }
     });
 </script>
 
