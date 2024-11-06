@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Livewire\Component;
+use Carbon\Carbon;
 
 use App\Models\User;
 use App\Models\Scrumboard;
@@ -318,14 +319,116 @@ class DashboardController extends Controller
     
     
     
-
-    public function bekijkScrumboardTijdlijn($slug, $id)
+    public function bekijkScrumboardTijdlijn(Request $request, $slug, $id)
     {
         $scrumboard = Scrumboard::findOrFail($id);
-        if ($slug !== \Str::slug($scrumboard->title)) {
-            abort(404);
+    
+        // Verkrijg de geselecteerde weergave (day, week, month) of default naar 'week'
+        $view = $request->query('view', 'week');
+    
+        // Verkrijg de startdatum van de periode (startOfPeriod) of default naar het begin van de huidige week
+        $startOfView = $request->query('startOfPeriod') 
+                        ? Carbon::parse($request->query('startOfPeriod')) 
+                        : Carbon::now()->startOfWeek(); // Default naar begin van de week
+    
+        // Pas de startdatum aan op basis van de geselecteerde weergave (day, week, maand)
+        if ($view == 'day') {
+            $startOfView = $startOfView->startOfDay();
+        } elseif ($view == 'week') {
+            $startOfView = $startOfView->startOfWeek();
+        } elseif ($view == 'month') {
+            $startOfView = $startOfView->startOfMonth();
         }
-
-        return view('dashboard.view-scrumboard.tijdlijn.index', compact('scrumboard'));
+    
+        // Bepaal het eindpunt voor de weergave (dag, week, maand)
+        if ($view == 'day') {
+            $endOfView = $startOfView->copy()->endOfDay();
+        } elseif ($view == 'week') {
+            $endOfView = $startOfView->copy()->endOfWeek();
+        } elseif ($view == 'month') {
+            $endOfView = $startOfView->copy()->endOfMonth();
+        }
+    
+        // Haal de sprints op binnen de geselecteerde periode (dag, week of maand)
+        $sprints = $scrumboard->sprints()
+            ->whereBetween('planned_start_date', [$startOfView, $endOfView])
+            ->orderBy('planned_start_date')
+            ->get();
+    
+        // Bereken de datums voor de vorige en volgende periode (dag, week, maand)
+        if ($view == 'day') {
+            // Voor dagweergave, vorige/volgende dag
+            $previousPeriodStart = $startOfView->copy()->subDay();
+            $nextPeriodStart = $startOfView->copy()->addDay();
+        } elseif ($view == 'week') {
+            // Voor weekweergave, vorige/volgende week
+            $previousPeriodStart = $startOfView->copy()->subWeek()->startOfWeek();
+            $nextPeriodStart = $startOfView->copy()->addWeek()->startOfWeek();
+        } elseif ($view == 'month') {
+            // Voor maandweergave, vorige/volgende maand
+            $previousPeriodStart = $startOfView->copy()->subMonth()->startOfMonth();
+            $nextPeriodStart = $startOfView->copy()->addMonth()->startOfMonth();
+        }
+    
+        // Verzameling van dagen in de huidige weergave
+        $calendarDays = collect();
+        if ($view == 'day') {
+            $calendarDays->push($startOfView);
+        } elseif ($view == 'week' || $view == 'month') {
+            for ($date = $startOfView->copy(); $date->lte($endOfView); $date->addDay()) {
+                $calendarDays->push($date->copy());
+            }
+        }
+    
+        // Groepeer de sprints per datum
+        $sprintsByDate = $sprints->groupBy(function ($sprint) {
+            return Carbon::parse($sprint->planned_start_date)->format('Y-m-d');
+        });
+    
+        // Return de view met de relevante gegevens
+        return view('dashboard.view-scrumboard.tijdlijn.index', 
+            compact('scrumboard', 'calendarDays', 'sprintsByDate', 'previousPeriodStart', 'nextPeriodStart', 'view', 'startOfView')
+        );
     }
+    
+    
+    // Hulpmethode voor het berekenen van de einddatum van de periode
+    private function getEndOfPeriod($startOfPeriod, $view)
+    {
+        switch ($view) {
+            case 'dag':
+                return $startOfPeriod->copy()->endOfDay();
+            case 'week':
+                return $startOfPeriod->copy()->endOfWeek();
+            case 'maand':
+                return $startOfPeriod->copy()->endOfMonth();
+        }
+    }
+    
+    // Hulpmethode voor het berekenen van de vorige periode
+    private function getPreviousPeriod($startOfPeriod, $view)
+    {
+        switch ($view) {
+            case 'dag':
+                return $startOfPeriod->copy()->subDay();
+            case 'week':
+                return $startOfPeriod->copy()->subWeek()->startOfWeek();
+            case 'maand':
+                return $startOfPeriod->copy()->subMonth()->startOfMonth();
+        }
+    }
+    
+    // Hulpmethode voor het berekenen van de volgende periode
+    private function getNextPeriod($startOfPeriod, $view)
+    {
+        switch ($view) {
+            case 'dag':
+                return $startOfPeriod->copy()->addDay();
+            case 'week':
+                return $startOfPeriod->copy()->addWeek()->startOfWeek();
+            case 'maand':
+                return $startOfPeriod->copy()->addMonth()->startOfMonth();
+        }
+    }
+    
 }
