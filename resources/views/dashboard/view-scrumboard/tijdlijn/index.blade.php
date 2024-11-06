@@ -61,21 +61,81 @@
         @elseif($view == 'month')
             <!-- Maandweergave -->
             <div class="calendar-header row">
-                    <div class="col-12 text-center">
-                        <h4>{{ $startOfView->format('F Y') }}</h4>
-                    </div>
+                <div class="col-12 text-center">
+                    <h4>{{ $startOfView->format('F Y') }}</h4>
+                </div>
                 @foreach(['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'] as $day)
                     <div class="col text-center font-weight-bold">{{ $day }}</div>
                 @endforeach
             </div>
 
             <div class="calendar-month">
-                @foreach($calendarDays->chunk(7) as $week)
+                @php
+                    // Bepaal de eerste dag van de maand
+                    $firstDayOfMonth = $startOfView->copy()->startOfMonth();
+                    $firstDayOfWeek = $firstDayOfMonth->copy()->startOfWeek();  // Start van de week (maandag)
+                    $daysFromPreviousMonth = collect();  // Lijst om de dagen van de vorige maand op te slaan
+
+                    // Het aantal dagen dat we moeten terugkijken in de vorige maand (maximaal 6 dagen)
+                    $daysFromPreviousMonthCount = 0;
+                    $lastDayOfPreviousMonth = $firstDayOfWeek->copy()->subDay();  // Laatste dag van de vorige maand
+
+                    // Voeg de dagen van de vorige maand toe, zolang we minder dan 6 dagen hebben toegevoegd
+                    while ($lastDayOfPreviousMonth->month == $firstDayOfMonth->month - 1 && $daysFromPreviousMonthCount < 0) {
+                        $daysFromPreviousMonth->push($lastDayOfPreviousMonth->copy()->format('Y-m-d'));
+                        $lastDayOfPreviousMonth->subDay();
+                        $daysFromPreviousMonthCount++;
+                    }
+
+                    // Verzamel de dagen van de huidige maand (november)
+                    $daysOfCurrentMonth = collect();
+                    $totalDays = 42;  // Maximaal aantal dagen in een maandweergave is 42 (6 weken)
+
+                    // Voeg de dagen van de maand toe, na de dagen van oktober
+                    for ($i = 0; $i < $totalDays - $daysFromPreviousMonthCount; $i++) {
+                        $daysOfCurrentMonth->push($firstDayOfWeek->copy()->addDays($i)->format('Y-m-d'));
+                    }
+                @endphp
+
+                <!-- Weergeven van de kalender -->
+                @foreach($daysFromPreviousMonth->chunk(7)->toArray() as $week)
                     <div class="row">
                         @foreach($week as $day)
                             <div class="col border p-2">
-                                <div class="calendar-day-header">{{ $day->format('j') }}</div>
-                                @foreach($sprintsByDate[$day->format('Y-m-d')] ?? [] as $sprint)
+                                @php
+                                    $currentDay = \Carbon\Carbon::parse($day);
+                                @endphp
+
+                                <!-- Als het een dag van de vorige maand is, markeer dan met een andere kleur -->
+                                <div class="calendar-day-header {{ $currentDay->month != $startOfView->month ? 'text-muted' : '' }}">
+                                    {{ $currentDay->format('j') }}
+                                </div>
+
+                                @foreach($sprintsByDate[$day] ?? [] as $sprint)
+                                    <div class="calendar-sprint bg-light p-1 rounded my-1">
+                                        <strong>{{ $sprint->name }}</strong><br>
+                                        <small>{{ $sprint->planned_start_date->format('H:i') }} - {{ $sprint->planned_end_date->format('H:i') }}</small>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endforeach
+                    </div>
+                @endforeach
+
+                <!-- Dagen van de huidige maand (november) -->
+                @foreach($daysOfCurrentMonth->chunk(7)->toArray() as $week)
+                    <div class="row">
+                        @foreach($week as $day)
+                            <div class="col border p-2">
+                                @php
+                                    $currentDay = \Carbon\Carbon::parse($day);
+                                @endphp
+
+                                <div class="calendar-day-header {{ $currentDay->month != $startOfView->month ? 'text-muted' : '' }}">
+                                    {{ $currentDay->format('j') }}
+                                </div>
+
+                                @foreach($sprintsByDate[$day] ?? [] as $sprint)
                                     <div class="calendar-sprint bg-light p-1 rounded my-1">
                                         <strong>{{ $sprint->name }}</strong><br>
                                         <small>{{ $sprint->planned_start_date->format('H:i') }} - {{ $sprint->planned_end_date->format('H:i') }}</small>
@@ -86,7 +146,6 @@
                     </div>
                 @endforeach
             </div>
-
         @endif
     </div>
 </div>
