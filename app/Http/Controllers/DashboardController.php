@@ -105,7 +105,10 @@ class DashboardController extends Controller
     public function bekijkScrumboardBeschrijving(Request $request, $slug, $id)
     {
         $scrumboard = Scrumboard::findOrFail($id);
-        $chats = ScrumboardChat::where('scrumboard_id', $id)->take(5)->get();
+        $chats = ScrumboardChat::where('scrumboard_id', $id)
+                                ->orderBy('created_at', 'desc')
+                                ->take(5)
+                                ->get();
 
         return view('dashboard.view-scrumboard.beschrijving.index', compact('scrumboard', 'chats'));
     }
@@ -155,7 +158,7 @@ class DashboardController extends Controller
     {
         $limit = 5; // Aantal berichten per aanvraag
         $chats = ScrumboardChat::where('scrumboard_id', $id)
-                    ->orderBy('created_at', 'asc')
+                    ->orderBy('created_at', 'desc')
                     ->skip($offset)
                     ->take($limit)
                     ->with('user')
@@ -322,16 +325,13 @@ class DashboardController extends Controller
     public function bekijkScrumboardTijdlijn(Request $request, $slug, $id)
     {
         $scrumboard = Scrumboard::findOrFail($id);
-    
-        // Verkrijg de geselecteerde weergave (day, week, month) of default naar 'week'
+        
         $view = $request->query('view', 'week');
-    
-        // Verkrijg de startdatum van de periode (startOfPeriod) of default naar het begin van de huidige week
+        
         $startOfView = $request->query('startOfPeriod') 
                         ? Carbon::parse($request->query('startOfPeriod')) 
-                        : Carbon::now()->startOfWeek(); // Default naar begin van de week
-    
-        // Pas de startdatum aan op basis van de geselecteerde weergave (day, week, maand)
+                        : Carbon::now()->startOfWeek();
+        
         if ($view == 'day') {
             $startOfView = $startOfView->startOfDay();
         } elseif ($view == 'week') {
@@ -339,8 +339,7 @@ class DashboardController extends Controller
         } elseif ($view == 'month') {
             $startOfView = $startOfView->startOfMonth();
         }
-    
-        // Bepaal het eindpunt voor de weergave (dag, week, maand)
+        
         if ($view == 'day') {
             $endOfView = $startOfView->copy()->endOfDay();
         } elseif ($view == 'week') {
@@ -348,29 +347,13 @@ class DashboardController extends Controller
         } elseif ($view == 'month') {
             $endOfView = $startOfView->copy()->endOfMonth();
         }
-    
-        // Haal de sprints op binnen de geselecteerde periode (dag, week of maand)
+        
         $sprints = $scrumboard->sprints()
             ->whereBetween('planned_start_date', [$startOfView, $endOfView])
+            ->orWhereBetween('planned_end_date', [$startOfView, $endOfView])
             ->orderBy('planned_start_date')
             ->get();
-    
-        // Bereken de datums voor de vorige en volgende periode (dag, week, maand)
-        if ($view == 'day') {
-            // Voor dagweergave, vorige/volgende dag
-            $previousPeriodStart = $startOfView->copy()->subDay();
-            $nextPeriodStart = $startOfView->copy()->addDay();
-        } elseif ($view == 'week') {
-            // Voor weekweergave, vorige/volgende week
-            $previousPeriodStart = $startOfView->copy()->subWeek()->startOfWeek();
-            $nextPeriodStart = $startOfView->copy()->addWeek()->startOfWeek();
-        } elseif ($view == 'month') {
-            // Voor maandweergave, vorige/volgende maand
-            $previousPeriodStart = $startOfView->copy()->subMonth()->startOfMonth();
-            $nextPeriodStart = $startOfView->copy()->addMonth()->startOfMonth();
-        }
-    
-        // Verzameling van dagen in de huidige weergave
+        
         $calendarDays = collect();
         if ($view == 'day') {
             $calendarDays->push($startOfView);
@@ -379,20 +362,39 @@ class DashboardController extends Controller
                 $calendarDays->push($date->copy());
             }
         }
-    
-        // Groepeer de sprints per datum
-        $sprintsByDate = $sprints->groupBy(function ($sprint) {
-            return Carbon::parse($sprint->planned_start_date)->format('Y-m-d');
-        });
-    
-        // Return de view met de relevante gegevens
+        
+        $sprintsByDate = collect();
+        foreach ($sprints as $sprint) {
+            $start = Carbon::parse($sprint->planned_start_date);
+            $end = Carbon::parse($sprint->planned_end_date);
+            
+            for ($date = $start->copy(); $date->lte($end); $date->addDay()) {
+                $formattedDate = $date->format('Y-m-d');
+                
+                if (!$sprintsByDate->has($formattedDate)) {
+                    $sprintsByDate[$formattedDate] = collect();
+                }
+                
+                $sprintsByDate[$formattedDate]->push($sprint);
+            }
+        }
+        
+        if ($view == 'day') {
+            $previousPeriodStart = $startOfView->copy()->subDay();
+            $nextPeriodStart = $startOfView->copy()->addDay();
+        } elseif ($view == 'week') {
+            $previousPeriodStart = $startOfView->copy()->subWeek()->startOfWeek();
+            $nextPeriodStart = $startOfView->copy()->addWeek()->startOfWeek();
+        } elseif ($view == 'month') {
+            $previousPeriodStart = $startOfView->copy()->subMonth()->startOfMonth();
+            $nextPeriodStart = $startOfView->copy()->addMonth()->startOfMonth();
+        }
+        
         return view('dashboard.view-scrumboard.tijdlijn.index', 
             compact('scrumboard', 'calendarDays', 'sprintsByDate', 'previousPeriodStart', 'nextPeriodStart', 'view', 'startOfView')
         );
     }
     
-    
-    // Hulpmethode voor het berekenen van de einddatum van de periode
     private function getEndOfPeriod($startOfPeriod, $view)
     {
         switch ($view) {
@@ -405,7 +407,6 @@ class DashboardController extends Controller
         }
     }
     
-    // Hulpmethode voor het berekenen van de vorige periode
     private function getPreviousPeriod($startOfPeriod, $view)
     {
         switch ($view) {
@@ -418,7 +419,6 @@ class DashboardController extends Controller
         }
     }
     
-    // Hulpmethode voor het berekenen van de volgende periode
     private function getNextPeriod($startOfPeriod, $view)
     {
         switch ($view) {
