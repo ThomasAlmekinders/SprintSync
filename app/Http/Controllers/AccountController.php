@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Validation\Rule;
 
 use App\Models\User;
 use App\Models\Address;
@@ -18,9 +19,16 @@ class AccountController extends Controller
     public function updateProfileUser(Request $request)
     {
         $validatedData = $request->validate([
-            'username' => 'required|string|max:255|unique:users,username,' . auth()->id(),
+            'username' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('users', 'username')->ignore(auth()->id()),
+            ],
             'profile_bio' => 'nullable|string|max:500',
         ]);
+
+        \Log::info('Validation passed', $validatedData);
 
         $user = auth()->user();
         $user->username = $validatedData['username'];
