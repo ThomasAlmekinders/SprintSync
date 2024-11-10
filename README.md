@@ -1,3 +1,13 @@
+UnitTesting:
+
+'Maak de env.testing en gebruik: `php artisan migrate --env=testing` om de test db aan te maken.'
+
+'Gebruik hierna: `php artisan test --env=testing` om test uit te voeren in de test database.'
+
+'om config te clearen `php artisan config:clear`'
+
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
