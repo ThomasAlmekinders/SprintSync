@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-light shadow-sm">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
-            <img src="{{ asset('images/logos/Logo_Tekst.svg') }}" alt="{{ config('app.name', 'Laravel') }}" style="width: 200px; height: auto;" height="67px" width="200px">
+            <img src="{{ asset('images/logos/Logo_SprintNest.svg') }}" alt="{{ config('app.name', 'Laravel') }}" style="width: 200px; height: auto;" height="67px" width="200px">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
