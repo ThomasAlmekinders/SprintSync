@@ -3,8 +3,13 @@ namespace Tests\Feature;
 
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
+
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Http\UploadedFile;
+
 use App\Models\User;
 
 class CreateUserTest extends TestCase
@@ -223,4 +228,27 @@ class CreateUserTest extends TestCase
             'connected_user_id' => $user2->id,
         ]);
     }
+
+    #[Test]
+    public function test_user_can_upload_profile_picture()
+    {
+        $user = User::factory()->create();
+    
+        $file = UploadedFile::fake()->image('profile_picture.jpg');
+        $response = $this->actingAs($user)->post(route('mijn-account.update-profile-picture'), [
+            'profile_picture' => $file,
+        ]);
+    
+        $filename = time() . '.' . $file->getClientOriginalExtension();
+    
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'profile_picture' => $filename,
+        ]);
+
+        $filePath = public_path('images/profile_pictures/' . $user->profile_picture);
+        if (File::exists($filePath)) {
+            File::delete($filePath);
+        }
+    }    
 }
