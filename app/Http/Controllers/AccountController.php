@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Testing\MimeType;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -42,9 +43,16 @@ class AccountController extends Controller
 
     public function updateProfilePicture(Request $request)
     {
+        $allowedExtensions = ['jpeg', 'png', 'jpg', 'gif', 'svg', 'webp'];
+
         $request->validate([
-            'profile_picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'profile_picture' => 'required|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
+
+        $extension = $request->file('profile_picture')->getClientOriginalExtension();
+        if (!in_array(strtolower($extension), $allowedExtensions)) {
+            return back()->withErrors(['profile_picture' => 'Het bestandstype wordt niet ondersteund.']);
+        }
 
         $user = Auth::user();
 
