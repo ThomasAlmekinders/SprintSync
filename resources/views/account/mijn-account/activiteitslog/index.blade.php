@@ -14,7 +14,7 @@
                         <col style="min-width: 175px;">
                         <col style="min-width: 350px;">
                         <col style="min-width: 150px;">
-                        <col style="min-width: 150px;">
+                        <col style="min-width: 300px;">
                     </colgroup>
                     <thead>
                         <tr>

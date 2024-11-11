@@ -9,6 +9,7 @@ use Livewire\Component;
 use Carbon\Carbon;
 
 use App\Models\User;
+use App\Models\ActivityLog;
 use App\Models\Scrumboard;
 use App\Models\ScrumboardSprint;
 use App\Models\ScrumboardTask;
@@ -34,6 +35,8 @@ class DashboardController extends Controller
 
     public function createScrumbord(Request $request)
     {
+        $user = auth()->user();
+        
         $request->validate([
             'titel' => 'required|string|max:255',
             'beschrijving' => 'nullable|string',
@@ -46,11 +49,15 @@ class DashboardController extends Controller
 
         $scrumbord->save();
 
+        $this->logActivity($user, "Scrumbord", "Je hebt een nieuw scrumbord aangemaakt.");
+
         return redirect()->back()->with('success', 'Het scrumbord is aangemaakt!');
     }
 
     public function updateSettings(Request $request)
     {
+        $user = auth()->user();
+
         $request->validate([
             'titel' => 'required|string|max:255',
             'beschrijving' => 'nullable|string',
@@ -63,6 +70,8 @@ class DashboardController extends Controller
         $scrumbord->active = $request->actief;
 
         $scrumbord->save();
+
+        $this->logActivity($user, "Scrumbord", "De scrumbord instellingen zijn aangepast.");
 
         return redirect()->back()->with('success', 'De scrumbord instelling zijn bijgewerkt!');
     }
@@ -431,4 +440,15 @@ class DashboardController extends Controller
         }
     }
     
+    private function logActivity($user, $name, $beschrijving)
+    {
+        ActivityLog::create([
+            'user_id' => $user->id,
+            'log_name' => $name,
+            'log_description' => $beschrijving,
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->header('User-Agent'),
+            'created_at' => now(),
+        ]);
+    }
 }
