@@ -22,9 +22,6 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" id="tools-tab" data-bs-toggle="tab" href="#tools" role="tab" aria-controls="tools" aria-selected="false">Tools en Frameworks</a>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="performance-tab" data-bs-toggle="tab" href="#performance" role="tab" aria-controls="performance" aria-selected="false">Prestaties & Schaling</a>
-                        </li>
                     </ul>
 
                     <div class="tab-content" id="technicalTabContent">
@@ -42,37 +39,110 @@
 
                         <!-- Database -->
                         <div class="tab-pane fade p-3" id="database" role="tabpanel" aria-labelledby="database-tab">
-                            <h5>Databaseontwerp</h5>
-                            <p>We gebruiken XAMPP voor het draaien van de database, wat het leven een stuk makkelijker maakt. De database is opgebouwd met verschillende tabellen die de basisgegevens van de applicatie bevatten. Hier zijn de belangrijkste tabellen en hun attributen:</p>
-                            <ul>
-                                <li><strong>Users</strong>:
+                            <div class="container">
+                                <h2 class="text-primary mb-4">3. Databaseontwerp</h2>
+                                
+                                <!-- Introductie -->
+                                <p>
+                                De database van SprintNest is ontworpen volgens een relationeel model en wordt beheerd via Laravel-migraties. Dit model biedt ondersteuning voor gebruikersbeheer, scrumborden, takenbeheer, en communicatie via chat.
+                                </p>
+
+                                <!-- Tabellenoverzicht -->
+                                <div class="card mb-4">
+                                <div class="card-header bg-primary text-white">
+                                    <h4>3.1 Tabellenoverzicht</h4>
+                                </div>
+                                <div class="card-body">
+                                    <p>Hieronder volgt een overzicht van de belangrijkste tabellen:</p>
                                     <ul>
-                                        <li>id (PK)</li>
-                                        <li>first_name</li>
-                                        <li>last_name</li>
-                                        <li>email</li>
-                                        <li>profile_picture</li>
+                                    <li><strong>Users:</strong> Bevat gebruikersinformatie zoals profielinstellingen.</li>
+                                    <li><strong>Scrumboards:</strong> Beheert scrumborden en hun details.</li>
+                                    <li><strong>Scrumboard_tasks:</strong> Beheert taken binnen scrumborden.</li>
                                     </ul>
-                                </li>
-                                <li><strong>Scrumboards</strong>:
+                                </div>
+                                </div>
+
+                                <!-- Users tabel -->
+                                <div class="card mb-4">
+                                <div class="card-header bg-secondary text-white">
+                                    <h5>Users</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Functie:</strong> Bevat informatie over gebruikers, zoals inloggegevens en profielinstellingen.</p>
+                                    <h6>Belangrijke attributen:</h6>
                                     <ul>
-                                        <li>id (PK)</li>
-                                        <li>name</li>
-                                        <li>description</li>
-                                        <li>owner_id (FK naar Users)</li>
+                                    <li><strong>id:</strong> Primaire sleutel (PK), unieke identificatie.</li>
+                                    <li><strong>username:</strong> Unieke gebruikersnaam.</li>
+                                    <li><strong>email:</strong> Uniek e-mailadres.</li>
+                                    <li><strong>profile_picture:</strong> Link naar profielfoto.</li>
                                     </ul>
-                                </li>
-                                <li><strong>Chats</strong>:
+                                    <h6>Relaties:</h6>
                                     <ul>
-                                        <li>id (PK)</li>
-                                        <li>message</li>
-                                        <li>sender_id (FK naar Users)</li>
-                                        <li>scrumboard_id (FK naar Scrumboards)</li>
+                                    <li>Een gebruiker kan meerdere scrumborden aanmaken.</li>
+                                    <li>Een gebruiker kan verbonden zijn met meerdere scrumborden.</li>
                                     </ul>
-                                </li>
-                            </ul>
-                            <p>Voor het beheren van de database gebruiken we migraties in Laravel, waarmee we eenvoudig wijzigingen kunnen aanbrengen zonder gegevens te verliezen.</p>
+                                </div>
+                                </div>
+
+                                <!-- Scrumboards tabel -->
+                                <div class="card mb-4">
+                                <div class="card-header bg-secondary text-white">
+                                    <h5>Scrumboards</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Functie:</strong> Beheert scrumborden en hun details.</p>
+                                    <h6>Belangrijke attributen:</h6>
+                                    <ul>
+                                    <li><strong>id:</strong> Primaire sleutel (PK), unieke identificatie.</li>
+                                    <li><strong>creator_id:</strong> Buitenlandse sleutel (FK) verwijzend naar een gebruiker.</li>
+                                    <li><strong>title:</strong> Titel van het scrumbord.</li>
+                                    </ul>
+                                    <h6>Relaties:</h6>
+                                    <ul>
+                                    <li>Een scrumbord bevat meerdere sprints en taken.</li>
+                                    <li>Een scrumbord kan gedeeld worden met meerdere gebruikers.</li>
+                                    </ul>
+                                </div>
+                                </div>
+
+                                <!-- Scrumboard_tasks tabel -->
+                                <div class="card mb-4">
+                                <div class="card-header bg-secondary text-white">
+                                    <h5>Scrumboard_tasks</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Functie:</strong> Beheert taken binnen scrumborden.</p>
+                                    <h6>Belangrijke attributen:</h6>
+                                    <ul>
+                                    <li><strong>id:</strong> Primaire sleutel (PK), unieke identificatie.</li>
+                                    <li><strong>sprint_id:</strong> Buitenlandse sleutel (FK) verwijzend naar een sprint.</li>
+                                    <li><strong>title:</strong> Titel van de taak.</li>
+                                    <li><strong>status:</strong> Status van de taak (bijv. "to_do").</li>
+                                    </ul>
+                                    <h6>Relaties:</h6>
+                                    <ul>
+                                    <li>Elke taak behoort tot een sprint.</li>
+                                    <li>Een taak kan toegewezen worden aan één gebruiker.</li>
+                                    </ul>
+                                </div>
+                                </div>
+
+                                <!-- Relaties en beheer -->
+                                <div class="card mb-4">
+                                <div class="card-header bg-primary text-white">
+                                    <h4>3.2 Relaties en beheer</h4>
+                                </div>
+                                <div class="card-body">
+                                    <p>De database is relationeel en gebruikt primaire en vreemde sleutels voor gegevensintegriteit. Laravel-migraties worden gebruikt voor beheer en versiecontrole.</p>
+                                    <ul>
+                                    <li>Relationeel model voor data-consistentie.</li>
+                                    <li>Veel-op-veel relaties tussen gebruikers en scrumborden.</li>
+                                    </ul>
+                                </div>
+                                </div>
+                            </div>
                         </div>
+
 
                         <!-- Beveiliging -->
                         <div class="tab-pane fade p-3" id="security" role="tabpanel" aria-labelledby="security-tab">
@@ -97,17 +167,6 @@
                                 <li><strong>CropperJS</strong>: Een handige tool voor het uploaden en bijsnijden van profielfoto's, zodat onze gebruikers altijd een mooi profiel kunnen hebben.</li>
                                 <li><strong>VSCode</strong>: De favoriete editor voor de meeste ontwikkelaars, en het is ook onze keuze voor dit project!</li>
                             </ul>
-                        </div>
-
-                        <!-- Prestaties en Schaling -->
-                        <div class="tab-pane fade p-3" id="performance" role="tabpanel" aria-labelledby="performance-tab">
-                            <h5>Prestaties & Schaling</h5>
-                            <p>Een soepel lopende applicatie is cruciaal. Daarom hebben we enkele plannen om de prestaties te optimaliseren:</p>
-                            <ul>
-                                <li>We implementeren lazy loading voor afbeeldingen, zodat de laadtijden van pagina's worden verminderd. Hierdoor hoeven gebruikers niet te wachten op afbeeldingen die ze misschien nooit bekijken.</li>
-                                <li>Daarnaast richten we ons op een efficiënt gebruik van database queries om ervoor te zorgen dat alles snel en soepel werkt, zelfs als het aantal gebruikers toeneemt.</li>
-                            </ul>
-                            <p>Op dit moment zijn er geen plannen om het project op grotere schaal uit te breiden, omdat we lokaal werken en ons richten op kleinere toepassingen. Maar wie weet wat de toekomst brengt?</p>
                         </div>
                     </div>
                 </div>

@@ -18,11 +18,10 @@
             <div class="mt-5">
                 <h2 class="h4">Accountbeheer</h2>
                 <ul>
-                    <li><a href="{{ route('mijn-account.index') }}">Mijn account</a></li>
+                    <li><a href="{{ route('mijn-account.profiel') }}">Mijn account</a></li>
                     <li class="mb-3"><a href="{{ route('connecties.index') }}">Connecties</a></li>
                     <li><a href="{{ route('register') }}">Registratie</a></li>
                     <li><a href="{{ route('login') }}">Inloggen</a></li>
-                    <li><a href="{{ route('password.request') }}">Wachtwoord Vergeten</a></li>
                 </ul>
             </div>
 
@@ -42,7 +41,7 @@
                     <li class="mb-3"><a href="{{ route('contact.index') }}">Contact</a></li>
                     <li><a href="{{ route('algemene-voorwaarden.index') }}">Algemene voorwaarden</a></li>
                     <li><a href="{{ route('privacystatement.index') }}">Privacyverklaring</a></li>
-                    <li><a href="{{ route('cookiestatement.index') }}">Cookieverklaring</a></li>
+                    <li><a href="{{ route('cookiestatement.index') }}">Cookiestatement</a></li>
                 </ul>
             </div>
 
@@ -54,7 +53,7 @@
             </div>
 
             <div class="mt-5">
-                <p class="text-muted">Laatst bijgewerkt: 29-09-2024</p>
+                <p class="text-muted">Laatst bijgewerkt: 18-11-2024</p>
             </div>
 
         </div>
