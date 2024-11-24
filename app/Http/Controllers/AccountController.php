@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Testing\MimeType;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -12,6 +13,7 @@ use Illuminate\Validation\Rule;
 
 use App\Models\User;
 use App\Models\Address;
+use App\Models\ActivityLog;
 use App\Models\UserVisibilitySettings;
 
 class AccountController extends Controller
@@ -41,9 +43,16 @@ class AccountController extends Controller
 
     public function updateProfilePicture(Request $request)
     {
+        $allowedExtensions = ['jpeg', 'png', 'jpg', 'gif', 'svg', 'webp'];
+
         $request->validate([
-            'profile_picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'profile_picture' => 'required|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
+
+        $extension = $request->file('profile_picture')->getClientOriginalExtension();
+        if (!in_array(strtolower($extension), $allowedExtensions)) {
+            return back()->withErrors(['profile_picture' => 'Het bestandstype wordt niet ondersteund.']);
+        }
 
         $user = Auth::user();
 
@@ -61,6 +70,8 @@ class AccountController extends Controller
 
             $user->profile_picture = $filename;
             $user->save();
+
+            $this->logActivity($user, "Profiel foto", "Jouw profielfoto is succesvol aangepast.");
 
             return redirect()->back()->with('success', 'Uw profielfoto is succesvol bijgewerkt.');
         }
@@ -131,6 +142,8 @@ class AccountController extends Controller
             'password' => Hash::make($request->new_password),
         ]);
 
+        $this->logActivity($user, "Wachtwoord aangepast", "Het wachtwoord is succesvol aangepast naar iets nieuws.");
+
         return back()->with('success', 'Wachtwoord is succesvol gewijzigd!');
     }
 
@@ -150,7 +163,21 @@ class AccountController extends Controller
             'show_phone',
             'show_address',
         ]));
-    
+        
+        $this->logActivity($user, "Zichtbaarheids instellingen", "De zichtbaarheidsinstellingen zijn bijgewerkt.");
+
         return back()->with('success', 'Instellingen succesvol bijgewerkt!');
     }    
+
+    private function logActivity($user, $name, $beschrijving)
+    {
+        ActivityLog::create([
+            'user_id' => $user->id,
+            'log_name' => $name,
+            'log_description' => $beschrijving,
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->header('User-Agent'),
+            'created_at' => now(),
+        ]);
+    }
 }

@@ -57,7 +57,9 @@
 </footer>
 
 <div class="web-settings">
-    <i class="bi bi-gear"></i>
+    <button class="btn text-white" onclick="document.body.scrollTop=0;document.documentElement.scrollTop=0;event.preventDefault()">
+        <i class="bi bi-chevron-double-up"></i>
+    </button>
 </div>
 
 <!-- Welkomst Modal -->

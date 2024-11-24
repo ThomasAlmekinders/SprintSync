@@ -26,7 +26,8 @@ class CreateUserTest extends TestCase
 
     #[Test]
     public function it_fails_to_create_a_user_with_invalid_data()
-    {        $this->withoutMiddleware();
+    {
+        $this->withoutMiddleware();
 
         $response = $this->postJson('/register', [
             'first_name' => '', // Vereist veld, leeg om validatie te forceren

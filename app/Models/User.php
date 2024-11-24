@@ -89,4 +89,8 @@ class User extends Authenticatable
         return $this->hasMany(ScrumboardChat::class);
     }
 
+    public function activityLog()
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
 }
