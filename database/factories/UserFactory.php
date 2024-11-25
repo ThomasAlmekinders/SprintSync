@@ -27,13 +27,13 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'username' => fake()->userName(), // Toegevoegd veld voor gebruikersnaam
-            'first_name' => fake()->firstName(), // Toegevoegd veld voor voornaam
-            'last_name' => fake()->lastName(), // Toegevoegd veld voor achternaam
-            'phone_number' => fake()->phoneNumber(), // Toegevoegd veld voor telefoonnummer
-            'profile_bio' => fake()->sentence(), // Toegevoegd veld voor bio
-            'profile_picture' => fake()->imageUrl(200, 200), // Toegevoegd veld voor profielfoto
-            'is_administrator' => fake()->boolean(), // Toegevoegd veld voor adminstatus
+            'username' => fake()->userName(),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
+            'phone_number' => fake()->phoneNumber(),
+            'profile_bio' => fake()->sentence(),
+            'profile_picture' => fake()->imageUrl(200, 200),
+            'is_administrator' => fake()->boolean(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),

@@ -25,9 +25,43 @@ class CreateUserTest extends TestCase
     }
 
     #[Test]
-    public function it_fails_to_create_a_user_with_invalid_data()
+    public function it_creates_a_user_with_custom_fields_except_username()
     {
-        $this->withoutMiddleware();
+        $user = User::factory()->create([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'phone_number' => '1234567890',
+            'profile_bio' => 'This is a test bio.',
+            'profile_picture' => '/test_picture.jpg',
+            'is_administrator' => true,
+        ]);
+
+        $this->assertDatabaseHas('users', [
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'phone_number' => '1234567890',
+            'profile_bio' => 'This is a test bio.',
+            'profile_picture' => '/test_picture.jpg',
+            'is_administrator' => true,
+        ]);
+    }
+
+    #[Test]
+    public function it_can_update_user_with_username()
+    {
+        $user = User::factory()->create();
+
+        $user->update(['username' => 'testuser123']);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'username' => 'testuser123',
+        ]);
+    }
+
+    #[Test]
+    public function it_fails_to_create_a_user_with_invalid_data()
+    {        $this->withoutMiddleware();
 
         $response = $this->postJson('/register', [
             'first_name' => '', // Vereist veld, leeg om validatie te forceren
@@ -103,6 +137,82 @@ class CreateUserTest extends TestCase
         $response->assertStatus(422);
         $this->assertEquals('user2', $user2->fresh()->username);
         $response->assertJsonValidationErrors(['username']);
+    }
+    
+    #[Test]
+    public function it_creates_an_admin_user()
+    {
+        $user = User::factory()->create([
+            'first_name' => 'adminuser',
+            'last_name' => 'Admin',
+            'phone_number' => '123453490',
+            'email' => 'admin@example.com',
+            'password' => 'securepassword123',
+            'profile_bio' => 'This is a test bio.',
+            'profile_picture' => '/test_picture.jpg',
+            'is_administrator' => true,
+        ]);
+
+        $this->assertDatabaseHas('users', [
+            'first_name' => 'adminuser',
+            'last_name' => 'Admin',
+            'phone_number' => '123453490',
+            'profile_bio' => 'This is a test bio.',
+            'profile_picture' => '/test_picture.jpg',
+            'is_administrator' => true,
+        ]);
+    }
+
+    #[Test]
+    public function it_creates_user_without_optional_fields()
+    {
+        $user = User::factory()->create([
+            'first_name' => 'minimalUser',
+            'last_name' => 'Minimal',
+            'email' => 'minimaluser@example.com',
+            'password' => 'securepassword123',
+        ]);
+
+        $this->assertDatabaseHas('users', [
+            'first_name' => 'minimalUser',
+            'last_name' => 'Minimal',
+            'email' => 'minimaluser@example.com',
+        ]);
+    }
+
+    #[Test]
+    public function it_creates_an_address_for_user()
+    {
+        $user = User::factory()->create();
+        $user->address()->create([
+            'street' => 'Main Street',
+            'house_number' => '123',
+            'city' => 'ExampleCity',
+            'postcode' => '12345',
+            'country' => 'ExampleCountry',
+        ]);
+
+        $this->assertDatabaseHas('addresses', [
+            'user_id' => $user->id,
+            'street' => 'Main Street',
+        ]);
+    }
+
+    #[Test]
+    public function it_creates_visibility_settings_for_user()
+    {
+        $user = User::factory()->create();
+        $user->visibilitySettings()->create([
+            'show_email' => true,
+            'show_phone' => false,
+            'show_address' => true,
+        ]);
+
+        $this->assertDatabaseHas('user_visibility_settings', [
+            'user_id' => $user->id,
+            'show_email' => true,
+            'show_address' => true,
+        ]);
     }
 
     #[Test]
