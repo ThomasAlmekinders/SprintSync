@@ -16,7 +16,8 @@ use App\Models\Scrumboard;
 class ScrumboardTest extends TestCase
 {
     #[Test]
-    public function it_creates_a_new_scrumboard() {
+    public function it_creates_a_new_scrumboard()
+    {
 
         $user = User::factory()->create();
         $scrumboard = Scrumboard::factory()->create([
@@ -120,6 +121,38 @@ class ScrumboardTest extends TestCase
             'description' => 'Updated Description',
         ]);
     }
+
+    #[Test]
+    public function test_controller_can_update_scrumbord()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $this->get(route('dashboard.index'));
+    
+        $scrumboard = Scrumboard::factory()->create([
+            'creator_id' => $user->id,
+            'title' => 'Oud Scrumboard Titel',
+            'description' => 'Oude beschrijving voor het scrumboard',
+        ]);
+    
+        $response = $this->post(route('dashboard.update-scrumboard-settings'), [
+            'scrumboard_id' => $scrumboard->id,
+            'titel' => 'Nieuwe Scrumboard Titel',
+            'beschrijving' => 'Nieuwe beschrijving voor het scrumboard',
+            'actief' => true,
+        ]);
+    
+        $this->assertDatabaseHas('scrumboards', [
+            'id' => $scrumboard->id,
+            'title' => 'Nieuwe Scrumboard Titel',
+            'description' => 'Nieuwe beschrijving voor het scrumboard',
+            'active' => true,
+        ]);
+    
+        $response->assertRedirect(route('dashboard.index'));
+        $response->assertSessionHas('success', 'De scrumbord instelling zijn bijgewerkt!');
+    }    
 
     #[Test]
     public function it_creates_multiple_scrumboards()
