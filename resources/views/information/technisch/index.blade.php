@@ -138,6 +138,9 @@
                                     <li>Relationeel model voor data-consistentie.</li>
                                     <li>Veel-op-veel relaties tussen gebruikers en scrumborden.</li>
                                     </ul>
+
+                                    <img src="{{ asset('images/SprintNest_DB_ontwerp.png') }}" alt="DB ontwerp" class="img-fluid" style="width: 100%; height: auto;">
+
                                 </div>
                                 </div>
                             </div>
