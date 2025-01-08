@@ -31,10 +31,10 @@
                             <div class="p-3">
                                 <h4>Inleiding</h4>
                                 <p>
-                                    Dit Functioneel Ontwerp (FO) beschrijft de kernfunctionaliteiten van het project, een platform dat gebruikers in staat stelt om scrum boards te beheren. Het platform is ontworpen voor teams die op een eenvoudige manier projecten en taken willen organiseren en samenwerken. Dit FO is geschreven in het kader van een leerproject en biedt een solide basis voor verdere ontwikkeling.
+                                    Dit Functioneel Ontwerp (FO) beschrijft de kernfunctionaliteiten en technische aspecten van het project, een platform waarmee gebruikers scrumborden kunnen beheren. Het platform is ontworpen voor teams en individuen die projecten en taken op een eenvoudige en georganiseerde manier willen beheren. 
                                 </p>
                                 <p>
-                                    In de volgende secties worden de belangrijkste functionaliteiten, gebruikersrollen, en technische details van het platform besproken. Het ontwerp richt zich op een intuïtieve gebruikerservaring, waarbij efficiëntie en eenvoud centraal staan.
+                                    Dit FO biedt een solide basis voor de huidige ontwikkeling, met een duidelijke focus op intuïtieve gebruikerservaring en schaalbaarheid. Het platform is ontwikkeld in het kader van een leerproject en kan in de toekomst verder worden uitgebreid met aanvullende functionaliteiten, zoals een live chatfunctie en premium accounts.
                                 </p>
                             </div>
                         </div>
@@ -47,16 +47,16 @@
                                     Het platform biedt de volgende functionaliteiten voor gebruikers:
                                 </p>
                                 <ul>
-                                    <li><strong>Scrum boards aanmaken:</strong> Gebruikers kunnen gemakkelijk een nieuw scrum board aanmaken en aanpassen aan hun wensen.</li>
-                                    <li><strong>Beheer van taken:</strong> Elk scrum board biedt de mogelijkheid om taken aan te maken, toe te wijzen en de voortgang te monitoren.</li>
-                                    <li><strong>Teambeheer:</strong> Gebruikers kunnen andere gebruikers uitnodigen en koppelen aan specifieke scrum boards om samen te werken.</li>
-                                    <li><strong>Chatfunctie:</strong> Op elk scrum board is er een chat, waar gebruikers berichten kunnen achterlaten om direct te communiceren over taken en projecten.</li>
-                                    <li><strong>Registratie en inloggen:</strong> Nieuwe gebruikers kunnen een account aanmaken door hun gegevens in te vullen en kunnen daarna inloggen om toegang te krijgen tot hun scrum boards.</li>
-                                    <li><strong>Profielinstellingen:</strong> Gebruikers kunnen hun accountgegevens bijwerken, waaronder profielfoto, wachtwoord en meldingsvoorkeuren.</li>
-                                    <li><strong>Contactformulier:</strong> Een ingebouwd contactformulier stelt gebruikers in staat om vragen te stellen of feedback te geven aan de beheerders van het platform.</li>
+                                    <li><strong>Scrum boards aanmaken:</strong> Gebruikers kunnen scrumborden creëren en beheren.</li>
+                                    <li><strong>Beheer van taken:</strong> Taken kunnen worden aangemaakt, toegewezen aan teamleden, en verplaatst tussen verschillende kolommen (To do, In progress, Done) met behulp van drag-and-drop functionaliteit.</li>
+                                    <li><strong>Teambeheer:</strong> Gebruikers kunnen andere gebruikers zoeken en toevoegen aan specifieke scrumborden. Er is een optie om gebruikers binnen hetzelfde bedrijf/groep automatisch als suggestie te tonen.</li>
+                                    <li><strong>Chatfunctie:</strong> Elk scrumbord biedt een chatoptie waar gebruikers berichten kunnen achterlaten. Een live chatfunctie is gepland voor toekomstige uitbreiding.</li>
+                                    <li><strong>Registratie en inloggen:</strong> Gebruikers kunnen een account aanmaken met persoonlijke gegevens zoals naam, adres en telefoonnummer.</li>
+                                    <li><strong>Profielinstellingen:</strong> Gebruikers kunnen hun accountgegevens bewerken, inclusief profielfoto's met CropperJS, wachtwoord en meldingsvoorkeuren.</li>
+                                    <li><strong>Contactformulier:</strong> Een ingebouwd contactformulier stelt gebruikers in staat om vragen te stellen of feedback te geven.</li>
                                 </ul>
                                 <p>
-                                    Het doel is om deze functies zo intuïtief mogelijk te maken, zodat zelfs gebruikers met weinig technische kennis de scrum boards effectief kunnen gebruiken.
+                                    Het doel is om deze functionaliteiten zo gebruiksvriendelijk mogelijk te maken, zodat zowel technische als niet-technische gebruikers het platform effectief kunnen gebruiken.
                                 </p>
                             </div>
                         </div>
@@ -66,15 +66,15 @@
                             <div class="p-3">
                                 <h4>Gebruikers</h4>
                                 <p>
-                                    Het platform is bedoeld voor verschillende typen gebruikers, waaronder projectleiders, teamleden, en individuele gebruikers die hun projecten willen beheren. Hieronder een overzicht van de belangrijkste gebruikersgroepen:
+                                    Het platform is ontworpen voor verschillende typen gebruikers, met specifieke rechten en functionaliteiten:
                                 </p>
                                 <ul>
-                                    <li><strong>Beheerders:</strong> Zij kunnen scrum boards aanmaken, taken beheren en andere gebruikers uitnodigen. Beheerders hebben volledige controle over de scrum boards.</li>
-                                    <li><strong>Teamleden:</strong> Gebruikers die zijn uitgenodigd voor een scrum board kunnen taken bekijken, uitvoeren en chatten met andere teamleden. Zij hebben echter geen beheerrechten.</li>
-                                    <li><strong>Individuele gebruikers:</strong> Gebruikers die hun eigen scrum boards willen aanmaken om persoonlijke projecten te beheren. Ze hebben dezelfde rechten als beheerders, maar werken zelfstandig.</li>
+                                    <li><strong>Beheerders:</strong> Hebben volledige controle over de scrumborden en kunnen gebruikers toevoegen of verwijderen, taken beheren en berichten modereren.</li>
+                                    <li><strong>Teamleden:</strong> Kunnen samenwerken aan scrumborden, taken uitvoeren en communiceren via de chat. Ze hebben geen beheerrechten.</li>
+                                    <li><strong>Individuele gebruikers:</strong> Kunnen scrumborden aanmaken en beheren voor persoonlijke projecten zonder samenwerking met anderen.</li>
                                 </ul>
                                 <p>
-                                    Elk van deze gebruikersgroepen heeft toegang tot dezelfde kernfunctionaliteiten, maar hun rechten binnen een scrum board kunnen verschillen afhankelijk van hun rol.
+                                    Deze gebruikersgroepen hebben toegang tot dezelfde kernfunctionaliteiten, maar hun rechten verschillen afhankelijk van hun rol binnen een scrumbord.
                                 </p>
                             </div>
                         </div>
@@ -84,17 +84,18 @@
                             <div class="p-3">
                                 <h4>Technische Details</h4>
                                 <p>
-                                    Dit project is ontwikkeld met behulp van de volgende technologieën en tools:
+                                    Het platform is gebouwd met behulp van moderne technologieën en tools om schaalbaarheid, beveiliging en gebruiksvriendelijkheid te waarborgen:
                                 </p>
                                 <ul>
-                                    <li><strong>Backend:</strong> Het platform is gebouwd met Laravel, een PHP-framework dat zorgt voor een robuuste back-end en eenvoudige database-interacties.</li>
-                                    <li><strong>Frontend:</strong> Voor de gebruikersinterface wordt gebruikgemaakt van Bootstrap, waardoor het platform responsief is en er professioneel uitziet op zowel desktop- als mobiele apparaten.</li>
-                                    <li><strong>Database:</strong> De gegevens worden opgeslagen in een MySQL-database, met tabellen voor gebruikers, gebruikersgroepen, scrum boards, taken, en berichten in de chat.</li>
-                                    <li><strong>Authenticatie:</strong> Gebruikers kunnen zich registreren en inloggen via een beveiligde authenticatie, mogelijk gemaakt door Laravel’s ingebouwde authenticatiesysteem.</li>
-                                    <li><strong>Versiebeheer:</strong> Git wordt gebruikt voor het versiebeheer van de codebase, zodat aanpassingen gemakkelijk kunnen worden bijgehouden en beheerd.</li>
+                                    <li><strong>Backend:</strong> Laravel wordt gebruikt voor een robuuste backend, inclusief gehaste wachtwoorden voor gebruikersauthenticatie.</li>
+                                    <li><strong>Frontend:</strong> Bootstrap zorgt voor een responsief design en intuïtieve gebruikersinterface.</li>
+                                    <li><strong>Database:</strong> Gegevens worden opgeslagen in een MySQL-database, met tabellen voor gebruikers, teams, scrumborden, taken en chatberichten.</li>
+                                    <li><strong>Afbeeldingen:</strong> CropperJS wordt gebruikt voor het bijsnijden en uploaden van profielfoto's.</li>
+                                    <li><strong>Versiebeheer:</strong> Git wordt gebruikt om codeversies te beheren en samenwerking tussen ontwikkelaars te faciliteren.</li>
+                                    <li><strong>Drag-and-drop:</strong> Gebouwd met behulp van JavaScript, geïntegreerd in de frontend voor het verplaatsen van taken.</li>
                                 </ul>
                                 <p>
-                                    Het doel van deze technische keuze is om het platform eenvoudig te beheren en schaalbaar te maken, zodat nieuwe functies in de toekomst gemakkelijk kunnen worden toegevoegd.
+                                    Deze technische opzet biedt een solide basis voor verdere ontwikkeling en uitbreiding van het platform.
                                 </p>
                             </div>
                         </div>

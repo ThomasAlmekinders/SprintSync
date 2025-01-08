@@ -40,112 +40,105 @@
                         <!-- Database -->
                         <div class="tab-pane fade p-3" id="database" role="tabpanel" aria-labelledby="database-tab">
                             <div class="container">
-                                <h2 class="text-primary mb-4">3. Databaseontwerp</h2>
-                                
-                                <!-- Introductie -->
-                                <p>
-                                De database van SprintNest is ontworpen volgens een relationeel model en wordt beheerd via Laravel-migraties. Dit model biedt ondersteuning voor gebruikersbeheer, scrumborden, takenbeheer, en communicatie via chat.
-                                </p>
+                                <h2 class="text-primary mb-4">Databaseontwerp</h2>
+                                <p>De database van SprintSync is ontworpen volgens een relationeel model en wordt beheerd via Laravel-migraties. Dit model biedt ondersteuning voor gebruikersbeheer, scrumborden, takenbeheer, en communicatie via chat.</p>
 
                                 <!-- Tabellenoverzicht -->
                                 <div class="card mb-4">
-                                <div class="card-header bg-primary text-white">
-                                    <h4>3.1 Tabellenoverzicht</h4>
-                                </div>
-                                <div class="card-body">
-                                    <p>Hieronder volgt een overzicht van de belangrijkste tabellen:</p>
-                                    <ul>
-                                    <li><strong>Users:</strong> Bevat gebruikersinformatie zoals profielinstellingen.</li>
-                                    <li><strong>Scrumboards:</strong> Beheert scrumborden en hun details.</li>
-                                    <li><strong>Scrumboard_tasks:</strong> Beheert taken binnen scrumborden.</li>
-                                    </ul>
-                                </div>
+                                    <div class="card-header bg-primary text-white">
+                                        <h4>Tabellenoverzicht</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Hieronder volgt een overzicht van de belangrijkste tabellen:</p>
+                                        <ul>
+                                            <li><strong>Users:</strong> Bevat gebruikersinformatie zoals profielinstellingen.</li>
+                                            <li><strong>Scrumboards:</strong> Beheert scrumborden en hun details.</li>
+                                            <li><strong>Scrumboard_tasks:</strong> Beheert taken binnen scrumborden.</li>
+                                        </ul>
+                                    </div>
                                 </div>
 
                                 <!-- Users tabel -->
                                 <div class="card mb-4">
-                                <div class="card-header bg-secondary text-white">
-                                    <h5>Users</h5>
-                                </div>
-                                <div class="card-body">
-                                    <p><strong>Functie:</strong> Bevat informatie over gebruikers, zoals inloggegevens en profielinstellingen.</p>
-                                    <h6>Belangrijke attributen:</h6>
-                                    <ul>
-                                    <li><strong>id:</strong> Primaire sleutel (PK), unieke identificatie.</li>
-                                    <li><strong>username:</strong> Unieke gebruikersnaam.</li>
-                                    <li><strong>email:</strong> Uniek e-mailadres.</li>
-                                    <li><strong>profile_picture:</strong> Link naar profielfoto.</li>
-                                    </ul>
-                                    <h6>Relaties:</h6>
-                                    <ul>
-                                    <li>Een gebruiker kan meerdere scrumborden aanmaken.</li>
-                                    <li>Een gebruiker kan verbonden zijn met meerdere scrumborden.</li>
-                                    </ul>
-                                </div>
+                                    <div class="card-header bg-secondary text-white">
+                                        <h5>Users</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Functie:</strong> Bevat informatie over gebruikers, zoals inloggegevens en profielinstellingen.</p>
+                                        <h6>Belangrijke attributen:</h6>
+                                        <ul>
+                                            <li><strong>id:</strong> Primaire sleutel (PK), unieke identificatie.</li>
+                                            <li><strong>username:</strong> Unieke gebruikersnaam.</li>
+                                            <li><strong>email:</strong> Uniek e-mailadres.</li>
+                                            <li><strong>profile_picture:</strong> Link naar profielfoto.</li>
+                                        </ul>
+                                        <h6>Relaties:</h6>
+                                        <ul>
+                                            <li>Een gebruiker kan meerdere scrumborden aanmaken.</li>
+                                            <li>Een gebruiker kan verbonden zijn met meerdere scrumborden.</li>
+                                        </ul>
+                                    </div>
                                 </div>
 
                                 <!-- Scrumboards tabel -->
                                 <div class="card mb-4">
-                                <div class="card-header bg-secondary text-white">
-                                    <h5>Scrumboards</h5>
-                                </div>
-                                <div class="card-body">
-                                    <p><strong>Functie:</strong> Beheert scrumborden en hun details.</p>
-                                    <h6>Belangrijke attributen:</h6>
-                                    <ul>
-                                    <li><strong>id:</strong> Primaire sleutel (PK), unieke identificatie.</li>
-                                    <li><strong>creator_id:</strong> Buitenlandse sleutel (FK) verwijzend naar een gebruiker.</li>
-                                    <li><strong>title:</strong> Titel van het scrumbord.</li>
-                                    </ul>
-                                    <h6>Relaties:</h6>
-                                    <ul>
-                                    <li>Een scrumbord bevat meerdere sprints en taken.</li>
-                                    <li>Een scrumbord kan gedeeld worden met meerdere gebruikers.</li>
-                                    </ul>
-                                </div>
+                                    <div class="card-header bg-secondary text-white">
+                                        <h5>Scrumboards</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Functie:</strong> Beheert scrumborden en hun details.</p>
+                                        <h6>Belangrijke attributen:</h6>
+                                        <ul>
+                                            <li><strong>id:</strong> Primaire sleutel (PK), unieke identificatie.</li>
+                                            <li><strong>creator_id:</strong> Buitenlandse sleutel (FK) verwijzend naar een gebruiker.</li>
+                                            <li><strong>title:</strong> Titel van het scrumbord.</li>
+                                        </ul>
+                                        <h6>Relaties:</h6>
+                                        <ul>
+                                            <li>Een scrumbord bevat meerdere sprints en taken.</li>
+                                            <li>Een scrumbord kan gedeeld worden met meerdere gebruikers.</li>
+                                        </ul>
+                                    </div>
                                 </div>
 
                                 <!-- Scrumboard_tasks tabel -->
                                 <div class="card mb-4">
-                                <div class="card-header bg-secondary text-white">
-                                    <h5>Scrumboard_tasks</h5>
-                                </div>
-                                <div class="card-body">
-                                    <p><strong>Functie:</strong> Beheert taken binnen scrumborden.</p>
-                                    <h6>Belangrijke attributen:</h6>
-                                    <ul>
-                                    <li><strong>id:</strong> Primaire sleutel (PK), unieke identificatie.</li>
-                                    <li><strong>sprint_id:</strong> Buitenlandse sleutel (FK) verwijzend naar een sprint.</li>
-                                    <li><strong>title:</strong> Titel van de taak.</li>
-                                    <li><strong>status:</strong> Status van de taak (bijv. "to_do").</li>
-                                    </ul>
-                                    <h6>Relaties:</h6>
-                                    <ul>
-                                    <li>Elke taak behoort tot een sprint.</li>
-                                    <li>Een taak kan toegewezen worden aan één gebruiker.</li>
-                                    </ul>
-                                </div>
+                                    <div class="card-header bg-secondary text-white">
+                                        <h5>Scrumboard_tasks</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Functie:</strong> Beheert taken binnen scrumborden.</p>
+                                        <h6>Belangrijke attributen:</h6>
+                                        <ul>
+                                            <li><strong>id:</strong> Primaire sleutel (PK), unieke identificatie.</li>
+                                            <li><strong>sprint_id:</strong> Buitenlandse sleutel (FK) verwijzend naar een sprint.</li>
+                                            <li><strong>title:</strong> Titel van de taak.</li>
+                                            <li><strong>status:</strong> Status van de taak (bijv. "to_do").</li>
+                                        </ul>
+                                        <h6>Relaties:</h6>
+                                        <ul>
+                                            <li>Elke taak behoort tot een sprint.</li>
+                                            <li>Een taak kan toegewezen worden aan één gebruiker.</li>
+                                        </ul>
+                                    </div>
                                 </div>
 
                                 <!-- Relaties en beheer -->
                                 <div class="card mb-4">
-                                <div class="card-header bg-primary text-white">
-                                    <h4>3.2 Relaties en beheer</h4>
-                                </div>
-                                <div class="card-body">
-                                    <p>De database is relationeel en gebruikt primaire en vreemde sleutels voor gegevensintegriteit. Laravel-migraties worden gebruikt voor beheer en versiecontrole.</p>
-                                    <ul>
-                                    <li>Relationeel model voor data-consistentie.</li>
-                                    <li>Veel-op-veel relaties tussen gebruikers en scrumborden.</li>
-                                    </ul>
-
-                                    <img src="{{ asset('images/SprintNest_DB_ontwerp.png') }}" alt="DB ontwerp" class="img-fluid" style="width: 100%; height: auto;">
-
-                                </div>
+                                    <div class="card-header bg-primary text-white">
+                                        <h4>Relaties en beheer</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>De database is relationeel en gebruikt primaire en vreemde sleutels voor gegevensintegriteit. Laravel-migraties worden gebruikt voor beheer en versiecontrole.</p>
+                                        <ul>
+                                            <li>Relationeel model voor data-consistentie.</li>
+                                            <li>Veel-op-veel relaties tussen gebruikers en scrumborden.</li>
+                                        </ul>
+                                        <img src="{{ asset('images/SprintNest_DB_ontwerp.png') }}" alt="DB ontwerp" class="img-fluid" style="width: 100%; height: auto;">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
 
                         <!-- Beveiliging -->
                         <div class="tab-pane fade p-3" id="security" role="tabpanel" aria-labelledby="security-tab">
@@ -172,6 +165,7 @@
                             </ul>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
