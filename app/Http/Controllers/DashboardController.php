@@ -48,6 +48,8 @@ class DashboardController extends Controller
         $scrumbord->creator_id = auth()->id();
 
         $scrumbord->save();
+        
+        $scrumbord->users()->attach($user->id);
 
         $this->logActivity($user, "Scrumbord", "Je hebt een nieuw scrumbord aangemaakt.");
 
@@ -122,18 +124,24 @@ class DashboardController extends Controller
         return view('dashboard.view-scrumboard.beschrijving.index', compact('scrumboard', 'chats'));
     }
     public function storeChatMessage(Request $request, $slug, $scrumboardId) {
-        
         $request->validate([
             'message' => 'required|string|max:1000',
         ]);
-
+    
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'Je moet ingelogd zijn om een bericht te sturen.');
+        }
+    
+        $userId = auth()->id();
+    
         $scrumboard = Scrumboard::findOrFail($scrumboardId);
+
         ScrumboardChat::create([
-            'user_id' => auth()->id(),
-            'scrumboard_id' => $scrumboard->id,
+            'user_id' => $userId,
+            'scrumboard_id' => $scrumboardId,
             'message' => $request->message,
         ]);
-
+    
         return redirect()
                 ->route('scrumboard.beschrijving', ['slug' => $scrumboard->title, 'id' => $scrumboard->id])
                 ->with('success', 'Bericht succesvol verzonden!');
